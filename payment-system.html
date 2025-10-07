@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পেমেন্ট সিস্টেম - রানীগঞ্জ রয়েল কেয়ার হাসপাতাল</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #059669;
+            --secondary-color: #0891b2;
+            --accent-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+            --light-color: #f0fdf4;
+            --dark-color: #1f2937;
+            --text-color: #374151;
+            --border-color: #e5e7eb;
+            --gradient-primary: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            --gradient-secondary: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .payment-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .payment-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .payment-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .payment-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .payment-body {
+            padding: 2rem;
+        }
+
+        .bill-summary {
+            background: var(--light-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .bill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .bill-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .bill-label {
+            color: var(--text-color);
+        }
+
+        .bill-amount {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .payment-methods {
+            margin-bottom: 2rem;
+        }
+
+        .method-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .payment-method {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary-color);
+            background: var(--light-color);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background: var(--light-color);
+        }
+
+        .payment-method input[type="radio"] {
+            display: none;
+        }
+
+        .method-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .method-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .method-details h6 {
+            margin: 0 0 0.25rem 0;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .method-details small {
+            color: #6b7280;
+        }
+
+        .qr-section {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            border: 2px dashed var(--primary-color);
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .qr-section.active {
+            display: block;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+
+        .qr-instructions {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .payment-id {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .timer {
+            background: var(--warning-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .payment-status {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+
+        .payment-status.success {
+            color: var(--success-color);
+        }
+
+        .payment-status.failed {
+            color: var(--accent-color);
+        }
+
+        .status-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-payment {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-color);
+        }
+
+        .btn-payment:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .security-info {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .security-info h6 {
+            color: #92400e;
+            margin-bottom: 0.5rem;
+        }
+
+        .security-info p {
+            color: #92400e;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .payment-container {
+                padding: 1rem;
+            }
+
+            .payment-header {
+                padding: 1.5rem;
+            }
+
+            .payment-title {
+                font-size: 1.5rem;
+            }
+
+            .payment-body {
+                padding: 1rem;
+            }
+
+            .qr-code {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-card" data-aos="fade-up">
+            <div class="payment-header">
+                <h1 class="payment-title">
+                    <i class="fas fa-credit-card"></i>
+                    পেমেন্ট সিস্টেম
+                </h1>
+                <p class="payment-subtitle">নিরাপদ ও সহজ অনলাইন পেমেন্ট</p>
+            </div>
+
+            <div class="payment-body">
+                <!-- Bill Summary -->
+                <div class="bill-summary">
+                    <h5 class="mb-3">বিল সারসংক্ষেপ</h5>
+                    <div class="bill-item">
+                        <span class="bill-label">পরামর্শ ফি</span>
+                        <span class="bill-amount" id="consultationFee">₹500</span>
+                    </div>
+                    <div class="bill-item">
+                        <span class="bill-label">সার্ভিস চার্জ</span>
+                        <span class="bill-amount" id="serviceCharge">₹20</span>
+                    </div>
+                    <div class="bill-item">
+                        <span class="bill-label">মোট পরিমাণ</span>
+                        <span class="bill-amount" id="totalAmount">₹520</span>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <h5 class="method-title">পেমেন্ট পদ্ধতি নির্বাচন করুন</h5>
+                    
+                    <div class="payment-method" onclick="selectPaymentMethod('upi')">
+                        <input type="radio" name="paymentMethod" value="upi" id="upi">
+                        <div class="method-info">
+                            <div class="method-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div class="method-details">
+                                <h6>UPI পেমেন্ট</h6>
+                                <small>PhonePe, Google Pay, Paytm</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-method" onclick="selectPaymentMethod('card')">
+                        <input type="radio" name="paymentMethod" value="card" id="card">
+                        <div class="method-info">
+                            <div class="method-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div class="method-details">
+                                <h6>ডেবিট/ক্রেডিট কার্ড</h6>
+                                <small>Visa, Mastercard, RuPay</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-method" onclick="selectPaymentMethod('netbanking')">
+                        <input type="radio" name="paymentMethod" value="netbanking" id="netbanking">
+                        <div class="method-info">
+                            <div class="method-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div class="method-details">
+                                <h6>নেট ব্যাংকিং</h6>
+                                <small>সকল প্রধান ব্যাংক</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-method" onclick="selectPaymentMethod('wallet')">
+                        <input type="radio" name="paymentMethod" value="wallet" id="wallet">
+                        <div class="method-info">
+                            <div class="method-icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="method-details">
+                                <h6>ডিজিটাল ওয়ালেট</h6>
+                                <small>Paytm, Mobikwik, Freecharge</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QR Code Section -->
+                <div class="qr-section" id="qrSection">
+                    <div class="payment-id" id="paymentId">পেমেন্ট আইডি: PAY123456789</div>
+                    <div class="qr-code" id="qrCode">
+                        <i class="fas fa-qrcode" style="font-size: 4rem; color: #059669;"></i>
+                    </div>
+                    <div class="qr-instructions">
+                        <h6>QR কোড স্ক্যান করুন</h6>
+                        <p>আপনার পেমেন্ট অ্যাপ দিয়ে QR কোড স্ক্যান করে পেমেন্ট সম্পন্ন করুন</p>
+                    </div>
+                    <div class="timer" id="timer">সময় বাকি: 09:59</div>
+                </div>
+
+                <!-- Payment Status -->
+                <div class="payment-status" id="paymentStatus">
+                    <div class="status-icon" id="statusIcon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h4 id="statusMessage">পেমেন্ট সফল!</h4>
+                    <p id="statusDescription">আপনার পেমেন্ট সফলভাবে সম্পন্ন হয়েছে।</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="payment-actions" id="paymentActions">
+                    <button class="btn-payment btn-primary" onclick="proceedPayment()" id="payButton">
+                        <i class="fas fa-lock"></i> নিরাপদ পেমেন্ট করুন
+                    </button>
+                    <button class="btn-payment btn-secondary" onclick="goBack()">
+                        <i class="fas fa-arrow-left"></i> পূর্ববর্তী পাতায় ফিরুন
+                    </button>
+                </div>
+
+                <!-- Security Information -->
+                <div class="security-info">
+                    <h6><i class="fas fa-shield-alt"></i> নিরাপত্তা তথ্য</h6>
+                    <p>আপনার পেমেন্ট 256-bit SSL এনক্রিপশন দ্বারা সুরক্ষিত। আমরা আপনার কার্ডের তথ্য সংরক্ষণ করি না।</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="js/payment-system.js"></script>
+</body>
+</html>

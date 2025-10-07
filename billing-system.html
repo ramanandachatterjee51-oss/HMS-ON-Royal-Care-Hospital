@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বিলিং সিস্টেম - রানীগঞ্জ রয়েল কেয়ার হাসপাতাল</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #dc2626;
+            --secondary-color: #059669;
+            --accent-color: #d97706;
+            --success-color: #16a34a;
+            --warning-color: #f59e0b;
+            --light-color: #fef2f2;
+            --dark-color: #1f2937;
+            --text-color: #374151;
+            --border-color: #e5e7eb;
+            --gradient-primary: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .billing-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .header-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .billing-form, .bill-summary {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25);
+            outline: none;
+        }
+
+        .bill-id {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background: white;
+        }
+
+        .service-checkbox {
+            width: 20px;
+            height: 20px;
+        }
+
+        .service-details {
+            flex: 1;
+        }
+
+        .service-name {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .service-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .service-price {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .quantity-input {
+            width: 80px;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .bill-summary-section {
+            background: var(--light-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .discount-section {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        .payment-methods {
+            margin-top: 1rem;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .payment-method:hover {
+            background: var(--light-color);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background: var(--light-color);
+        }
+
+        .recent-bills {
+            margin-top: 2rem;
+        }
+
+        .bill-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+        }
+
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .bill-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-paid {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-overdue {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .billing-container {
+                padding: 1rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .service-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="billing-container">
+        <!-- Header Section -->
+        <div class="header-section" data-aos="fade-down">
+            <h1 class="page-title">
+                <i class="fas fa-file-invoice-dollar"></i>
+                বিলিং সিস্টেম
+            </h1>
+            <p>স্বয়ংক্রিয় গণনা সহ হাসপাতালের বিলিং ব্যবস্থাপনা</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Billing Form -->
+            <div class="billing-form" data-aos="fade-right">
+                <!-- Bill ID -->
+                <div class="bill-id" id="billId">
+                    বিল আইডি: BILL-Loading...
+                </div>
+
+                <form id="billingForm">
+                    <!-- Patient Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-user"></i>
+                            রোগীর তথ্য
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">রোগীর নাম *</label>
+                                    <input type="text" class="form-control" id="patientName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">রোগী আইডি</label>
+                                    <input type="text" class="form-control" id="patientId" placeholder="PT123456">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">মোবাইল নম্বর *</label>
+                                    <input type="tel" class="form-control" id="patientMobile" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">বিল তারিখ *</label>
+                                    <input type="date" class="form-control" id="billDate" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Services Selection -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-list-check"></i>
+                            সেবা নির্বাচন
+                        </h3>
+                        <div id="servicesList">
+                            <!-- Services will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Additional Charges -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-plus-circle"></i>
+                            অতিরিক্ত চার্জ
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">জরুরি চার্জ (৳)</label>
+                                    <input type="number" class="form-control" id="emergencyCharge" min="0" value="0" onchange="calculateTotal()">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">অন্যান্য চার্জ (৳)</label>
+                                    <input type="number" class="form-control" id="otherCharges" min="0" value="0" onchange="calculateTotal()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">মন্তব্য</label>
+                            <textarea class="form-control" id="billNotes" rows="2" placeholder="বিল সংক্রান্ত কোনো মন্তব্য..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Bill Summary -->
+            <div class="bill-summary" data-aos="fade-left">
+                <h3 class="section-title">
+                    <i class="fas fa-calculator"></i>
+                    বিল সারসংক্ষেপ
+                </h3>
+                
+                <div class="bill-summary-section">
+                    <div class="summary-item">
+                        <span>সেবার মোট খরচ:</span>
+                        <span id="servicesTotal">৳0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>জরুরি চার্জ:</span>
+                        <span id="emergencyTotal">৳0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>অন্যান্য চার্জ:</span>
+                        <span id="otherTotal">৳0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>সাব টোটাল:</span>
+                        <span id="subTotal">৳0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>ট্যাক্স (৫%):</span>
+                        <span id="taxAmount">৳0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>মোট পরিমাণ:</span>
+                        <span id="grandTotal">৳0</span>
+                    </div>
+                </div>
+
+                <!-- Discount Section -->
+                <div class="discount-section">
+                    <h6><i class="fas fa-percent"></i> ছাড়</h6>
+                    <div class="row">
+                        <div class="col-8">
+                            <select class="form-select" id="discountType" onchange="applyDiscount()">
+                                <option value="none">কোনো ছাড় নেই</option>
+                                <option value="senior">সিনিয়র সিটিজেন (১০%)</option>
+                                <option value="student">ছাত্র/ছাত্রী (৫%)</option>
+                                <option value="employee">কর্মচারী (১৫%)</option>
+                                <option value="custom">কাস্টম</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" class="form-control" id="customDiscount" placeholder="%" min="0" max="100" onchange="applyDiscount()" disabled>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <strong>ছাড়ের পরিমাণ: <span id="discountAmount">৳0</span></strong>
+                    </div>
+                    <div>
+                        <strong>চূড়ান্ত মোট: <span id="finalTotal">৳0</span></strong>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <h6><i class="fas fa-credit-card"></i> পেমেন্ট পদ্ধতি</h6>
+                    <div class="payment-method" onclick="selectPaymentMethod('cash')">
+                        <input type="radio" name="paymentMethod" value="cash" id="cash">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>নগদ</span>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod('card')">
+                        <input type="radio" name="paymentMethod" value="card" id="card">
+                        <i class="fas fa-credit-card"></i>
+                        <span>কার্ড</span>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod('upi')">
+                        <input type="radio" name="paymentMethod" value="upi" id="upi">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>UPI</span>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod('insurance')">
+                        <input type="radio" name="paymentMethod" value="insurance" id="insurance">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>ইন্স্যুরেন্স</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-3">
+                    <button class="btn btn-primary" onclick="generateBill()">
+                        <i class="fas fa-file-invoice"></i> বিল তৈরি করুন
+                    </button>
+                    <button class="btn btn-secondary" onclick="printBill()">
+                        <i class="fas fa-print"></i> প্রিন্ট করুন
+                    </button>
+                </div>
+
+                <!-- Recent Bills -->
+                <div class="recent-bills">
+                    <h6><i class="fas fa-history"></i> সাম্প্রতিক বিল</h6>
+                    <div id="recentBillsList">
+                        <!-- Recent bills will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/billing-system-new.js"></script>
+</body>
+</html>

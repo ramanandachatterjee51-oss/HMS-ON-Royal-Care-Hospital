@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>স্টক ব্যবস্থাপনা - রানীগঞ্জ রয়েল কেয়ার হাসপাতাল</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #ea580c;
+            --secondary-color: #059669;
+            --accent-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+            --light-color: #fff7ed;
+            --dark-color: #1f2937;
+            --text-color: #374151;
+            --border-color: #e5e7eb;
+            --gradient-primary: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .stock-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .header-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .in-stock { color: var(--success-color); }
+        .low-stock { color: var(--warning-color); }
+        .out-of-stock { color: var(--accent-color); }
+        .expired { color: #6b7280; }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        .stock-form, .stock-list {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(234, 88, 12, 0.25);
+            outline: none;
+        }
+
+        .stock-id {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stock-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+            transition: var(--transition);
+        }
+
+        .stock-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .stock-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-in-stock {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-low-stock {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-out-of-stock {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status-expired {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .stock-details {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .quantity-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .quantity-bar {
+            flex: 1;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .quantity-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .fill-high { background: var(--success-color); }
+        .fill-medium { background: var(--warning-color); }
+        .fill-low { background: var(--accent-color); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stock-container {
+                padding: 1rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stock-container">
+        <!-- Header Section -->
+        <div class="header-section" data-aos="fade-down">
+            <h1 class="page-title">
+                <i class="fas fa-boxes"></i>
+                স্টক ব্যবস্থাপনা
+            </h1>
+            <p>হাসপাতালের ইনভেন্টরি ও স্টক ব্যবস্থাপনা সিস্টেম</p>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid" data-aos="fade-up">
+            <div class="stat-card">
+                <div class="stat-number in-stock" id="inStockItems">0</div>
+                <div>স্টকে আছে</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number low-stock" id="lowStockItems">0</div>
+                <div>কম স্টক</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number out-of-stock" id="outOfStockItems">0</div>
+                <div>স্টক শেষ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number expired" id="expiredItems">0</div>
+                <div>মেয়াদ উত্তীর্ণ</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Stock Entry Form -->
+            <div class="stock-form" data-aos="fade-right">
+                <!-- Stock ID -->
+                <div class="stock-id" id="stockId">
+                    স্টক আইডি: STK-Loading...
+                </div>
+
+                <form id="stockForm">
+                    <!-- Item Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            পণ্যের তথ্য
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">পণ্যের নাম *</label>
+                                    <input type="text" class="form-control" id="itemName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">ক্যাটেগরি *</label>
+                                    <select class="form-select" id="category" required>
+                                        <option value="">নির্বাচন করুন</option>
+                                        <option value="Medicine">ওষুধ</option>
+                                        <option value="Equipment">যন্ত্রপাতি</option>
+                                        <option value="Supplies">সরবরাহ</option>
+                                        <option value="Consumables">ভোগ্যপণ্য</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">ব্র্যান্ড/প্রস্তুতকারক</label>
+                                    <input type="text" class="form-control" id="brand">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">ব্যাচ নম্বর</label>
+                                    <input type="text" class="form-control" id="batchNumber">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quantity & Pricing -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-calculator"></i>
+                            পরিমাণ ও মূল্য
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">বর্তমান স্টক *</label>
+                                    <input type="number" class="form-control" id="currentStock" min="0" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">সর্বনিম্ন স্টক *</label>
+                                    <input type="number" class="form-control" id="minimumStock" min="0" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">একক মূল্য (৳) *</label>
+                                    <input type="number" class="form-control" id="unitPrice" min="0" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">একক</label>
+                                    <select class="form-select" id="unit">
+                                        <option value="Piece">পিস</option>
+                                        <option value="Box">বক্স</option>
+                                        <option value="Bottle">বোতল</option>
+                                        <option value="Packet">প্যাকেট</option>
+                                        <option value="Kg">কেজি</option>
+                                        <option value="Liter">লিটার</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dates & Supplier -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-calendar"></i>
+                            তারিখ ও সরবরাহকারী
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">ক্রয়ের তারিখ</label>
+                                    <input type="date" class="form-control" id="purchaseDate">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">মেয়াদ উত্তীর্ণের তারিখ</label>
+                                    <input type="date" class="form-control" id="expiryDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">সরবরাহকারী</label>
+                            <input type="text" class="form-control" id="supplier" placeholder="সরবরাহকারীর নাম">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">মন্তব্য</label>
+                            <textarea class="form-control" id="notes" rows="2" placeholder="অতিরিক্ত তথ্য..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> স্টক যোগ করুন
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Stock List -->
+            <div class="stock-list" data-aos="fade-left">
+                <h3 class="section-title">
+                    <i class="fas fa-list"></i>
+                    স্টক তালিকা
+                </h3>
+                <div id="stocksList">
+                    <!-- Stock items will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/stock-management.js"></script>
+</body>
+</html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অ্যাপয়েন্টমেন্ট সিস্টেম - রানীগঞ্জ রয়েল কেয়ার হাসপাতাল</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0891b2;
+            --secondary-color: #059669;
+            --accent-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+            --light-color: #ecfeff;
+            --dark-color: #1f2937;
+            --text-color: #374151;
+            --border-color: #e5e7eb;
+            --gradient-primary: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            --gradient-secondary: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .appointment-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .header-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .page-subtitle {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+
+        .appointment-form-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 0 1rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--border-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .step-number.active {
+            background: var(--gradient-primary);
+        }
+
+        .step-number.completed {
+            background: var(--success-color);
+        }
+
+        .step-title {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(8, 145, 178, 0.25);
+            outline: none;
+        }
+
+        .doctor-card {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .doctor-card:hover {
+            border-color: var(--primary-color);
+            background: var(--light-color);
+        }
+
+        .doctor-card.selected {
+            border-color: var(--primary-color);
+            background: var(--light-color);
+        }
+
+        .doctor-card input[type="radio"] {
+            display: none;
+        }
+
+        .doctor-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .doctor-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .doctor-details h6 {
+            margin: 0 0 0.25rem 0;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .doctor-specialization {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .doctor-fee {
+            color: var(--success-color);
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .time-slot {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .time-slot:hover {
+            border-color: var(--primary-color);
+            background: var(--light-color);
+        }
+
+        .time-slot.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .time-slot.unavailable {
+            background: #fee2e2;
+            color: #991b1b;
+            cursor: not-allowed;
+        }
+
+        .appointment-summary {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .summary-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+
+        .summary-label {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .summary-value {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .btn-step {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--border-color);
+            color: var(--text-color);
+        }
+
+        .btn-step:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .appointment-id {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-widget {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-nav {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.25rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .calendar-day:hover {
+            background: var(--light-color);
+        }
+
+        .calendar-day.selected {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day.unavailable {
+            color: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .appointment-summary {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .appointment-container {
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .step-indicator {
+                flex-wrap: wrap;
+            }
+
+            .step {
+                margin: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="appointment-container">
+        <!-- Header Section -->
+        <div class="header-section" data-aos="fade-down">
+            <h1 class="page-title">
+                <i class="fas fa-calendar-plus"></i>
+                অ্যাপয়েন্টমেন্ট বুকিং সিস্টেম
+            </h1>
+            <p class="page-subtitle">আধুনিক ও সহজ অ্যাপয়েন্টমেন্ট বুকিং প্রক্রিয়া</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Appointment Form Section -->
+            <div class="appointment-form-section" data-aos="fade-right">
+                <!-- Progress Bar -->
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 25%"></div>
+                </div>
+
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step">
+                        <div class="step-number active" id="step1">1</div>
+                        <div class="step-title">রোগীর তথ্য</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number" id="step2">2</div>
+                        <div class="step-title">ডাক্তার নির্বাচন</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number" id="step3">3</div>
+                        <div class="step-title">সময় নির্বাচন</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number" id="step4">4</div>
+                        <div class="step-title">নিশ্চিতকরণ</div>
+                    </div>
+                </div>
+
+                <form id="appointmentForm">
+                    <!-- Step 1: Patient Information -->
+                    <div class="form-step active" id="formStep1">
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-user"></i>
+                                রোগীর তথ্য
+                            </h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">পূর্ণ নাম *</label>
+                                        <input type="text" class="form-control" id="patientName" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">বয়স *</label>
+                                        <input type="number" class="form-control" id="patientAge" min="1" max="120" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">লিঙ্গ *</label>
+                                        <select class="form-select" id="patientGender" required>
+                                            <option value="">নির্বাচন করুন</option>
+                                            <option value="পুরুষ">পুরুষ</option>
+                                            <option value="মহিলা">মহিলা</option>
+                                            <option value="অন্যান্য">অন্যান্য</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">মোবাইল নম্বর *</label>
+                                        <input type="tel" class="form-control" id="patientMobile" placeholder="+91 98765 43210" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">সমস্যার বিবরণ</label>
+                                <textarea class="form-control" id="patientSymptoms" rows="3" placeholder="আপনার সমস্যার সংক্ষিপ্ত বিবরণ লিখুন..."></textarea>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn-step btn-primary" onclick="nextStep(2)">পরবর্তী</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Doctor Selection -->
+                    <div class="form-step" id="formStep2">
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-user-md"></i>
+                                ডাক্তার নির্বাচন
+                            </h3>
+                            <div class="form-group">
+                                <label class="form-label">বিভাগ নির্বাচন করুন</label>
+                                <select class="form-select" id="departmentSelect" onchange="filterDoctors()">
+                                    <option value="">সকল বিভাগ</option>
+                                    <option value="কার্ডিওলজি">কার্ডিওলজি</option>
+                                    <option value="নিউরোলজি">নিউরোলজি</option>
+                                    <option value="অর্থোপেডিক্স">অর্থোপেডিক্স</option>
+                                    <option value="গাইনোকোলজি">গাইনোকোলজি</option>
+                                    <option value="পেডিয়াট্রিক্স">পেডিয়াট্রিক্স</option>
+                                    <option value="সাধারণ চিকিৎসা">সাধারণ চিকিৎসা</option>
+                                </select>
+                            </div>
+                            <div id="doctorsList">
+                                <!-- Doctors will be loaded dynamically -->
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn-step btn-secondary" onclick="prevStep(1)">পূর্ববর্তী</button>
+                            <button type="button" class="btn-step btn-primary" onclick="nextStep(3)">পরবর্তী</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Time Selection -->
+                    <div class="form-step" id="formStep3">
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-clock"></i>
+                                সময় নির্বাচন
+                            </h3>
+                            <div class="calendar-widget">
+                                <div class="calendar-header">
+                                    <button type="button" class="calendar-nav" onclick="changeMonth(-1)">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <h5 id="calendarMonth"></h5>
+                                    <button type="button" class="calendar-nav" onclick="changeMonth(1)">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                                <div class="calendar-grid" id="calendarGrid">
+                                    <!-- Calendar will be generated dynamically -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">উপলব্ধ সময়</label>
+                                <div id="timeSlots">
+                                    <!-- Time slots will be loaded dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn-step btn-secondary" onclick="prevStep(2)">পূর্ববর্তী</button>
+                            <button type="button" class="btn-step btn-primary" onclick="nextStep(4)">পরবর্তী</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Confirmation -->
+                    <div class="form-step" id="formStep4">
+                        <div class="form-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-check-circle"></i>
+                                অ্যাপয়েন্টমেন্ট নিশ্চিতকরণ
+                            </h3>
+                            <div class="appointment-id" id="appointmentId">
+                                অ্যাপয়েন্টমেন্ট আইডি: APP-Loading...
+                            </div>
+                            <div id="confirmationDetails">
+                                <!-- Confirmation details will be loaded dynamically -->
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn-step btn-secondary" onclick="prevStep(3)">পূর্ববর্তী</button>
+                            <button type="submit" class="btn-step btn-primary">অ্যাপয়েন্টমেন্ট নিশ্চিত করুন</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Appointment Summary -->
+            <div class="appointment-summary" data-aos="fade-left">
+                <h3 class="summary-title">অ্যাপয়েন্টমেন্ট সারসংক্ষেপ</h3>
+                <div id="appointmentSummary">
+                    <div class="summary-item">
+                        <span class="summary-label">রোগীর নাম:</span>
+                        <span class="summary-value" id="summaryPatientName">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">ডাক্তার:</span>
+                        <span class="summary-value" id="summaryDoctorName">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">বিভাগ:</span>
+                        <span class="summary-value" id="summaryDepartment">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">তারিখ:</span>
+                        <span class="summary-value" id="summaryDate">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">সময়:</span>
+                        <span class="summary-value" id="summaryTime">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">পরামর্শ ফি:</span>
+                        <span class="summary-value" id="summaryFee">₹0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/appointment-system.js"></script>
+</body>
+</html>

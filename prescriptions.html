@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রেসক্রিপশন - রানীগঞ্জ রয়েল কেয়ার হাসপাতাল</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #7c3aed;
+            --secondary-color: #059669;
+            --accent-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+            --light-color: #faf5ff;
+            --dark-color: #1f2937;
+            --text-color: #374151;
+            --border-color: #e5e7eb;
+            --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .prescription-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .header-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .prescription-form, .prescription-list {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(124, 58, 237, 0.25);
+            outline: none;
+        }
+
+        .prescription-id {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .medicine-entry {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: var(--light-color);
+        }
+
+        .medicine-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .btn-add-medicine {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-remove {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .prescription-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .prescription-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .prescription-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .prescription-date {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .prescription-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-expired {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .medicine-list {
+            margin-top: 0.5rem;
+        }
+
+        .medicine-item {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .prescription-container {
+                padding: 1rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .medicine-row {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="prescription-container">
+        <!-- Header Section -->
+        <div class="header-section" data-aos="fade-down">
+            <h1 class="page-title">
+                <i class="fas fa-prescription"></i>
+                প্রেসক্রিপশন
+            </h1>
+            <p>ডিজিটাল প্রেসক্রিপশন তৈরি ও ব্যবস্থাপনা</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Prescription Form -->
+            <div class="prescription-form" data-aos="fade-right">
+                <!-- Prescription ID -->
+                <div class="prescription-id" id="prescriptionId">
+                    প্রেসক্রিপশন আইডি: RX-Loading...
+                </div>
+
+                <form id="prescriptionForm">
+                    <!-- Patient Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-user"></i>
+                            রোগীর তথ্য
+                        </h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">রোগীর নাম *</label>
+                                    <input type="text" class="form-control" id="patientName" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">বয়স *</label>
+                                    <input type="number" class="form-control" id="patientAge" min="1" max="120" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">লিঙ্গ *</label>
+                                    <select class="form-select" id="patientGender" required>
+                                        <option value="">নির্বাচন করুন</option>
+                                        <option value="male">পুরুষ</option>
+                                        <option value="female">মহিলা</option>
+                                        <option value="other">অন্যান্য</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">ওজন (কেজি)</label>
+                                    <input type="number" class="form-control" id="patientWeight" min="1" max="300">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diagnosis -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-stethoscope"></i>
+                            রোগ নির্ণয়
+                        </h3>
+                        <div class="form-group">
+                            <label class="form-label">প্রাথমিক রোগ নির্ণয় *</label>
+                            <textarea class="form-control" id="primaryDiagnosis" rows="2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">দ্বিতীয় রোগ নির্ণয়</label>
+                            <textarea class="form-control" id="secondaryDiagnosis" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Medicines -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-pills"></i>
+                            ওষুধের তালিকা
+                        </h3>
+                        <div id="medicinesList">
+                            <div class="medicine-entry">
+                                <div class="medicine-row">
+                                    <div class="form-group">
+                                        <label class="form-label">ওষুধের নাম *</label>
+                                        <input type="text" class="form-control medicine-name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">ডোজ *</label>
+                                        <input type="text" class="form-control medicine-dose" placeholder="500mg" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">ফ্রিকোয়েন্সি *</label>
+                                        <select class="form-select medicine-frequency" required>
+                                            <option value="">নির্বাচন করুন</option>
+                                            <option value="1+0+0">দিনে ১ বার (সকালে)</option>
+                                            <option value="1+0+1">দিনে ২ বার (সকাল-রাত)</option>
+                                            <option value="1+1+1">দিনে ৩ বার (সকাল-দুপুর-রাত)</option>
+                                            <option value="1+1+1+1">দিনে ৪ বার</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">সময়কাল *</label>
+                                        <input type="text" class="form-control medicine-duration" placeholder="৭ দিন" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="button" class="btn-remove" onclick="removeMedicine(this)" style="display: none;">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-add-medicine" onclick="addMedicine()">
+                            <i class="fas fa-plus"></i> ওষুধ যোগ করুন
+                        </button>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-clipboard-list"></i>
+                            নির্দেশনা
+                        </h3>
+                        <div class="form-group">
+                            <label class="form-label">সাধারণ নির্দেশনা</label>
+                            <textarea class="form-control" id="generalInstructions" rows="3" placeholder="খাবারের পর সেবন করুন, পর্যাপ্ত পানি পান করুন..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">পরবর্তী ভিজিট</label>
+                            <input type="date" class="form-control" id="nextVisit">
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> প্রেসক্রিপশন সংরক্ষণ করুন
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Prescription List -->
+            <div class="prescription-list" data-aos="fade-left">
+                <h3 class="section-title">
+                    <i class="fas fa-list"></i>
+                    সাম্প্রতিক প্রেসক্রিপশন
+                </h3>
+                <div id="prescriptionsList">
+                    <!-- Prescriptions will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/prescriptions-new.js"></script>
+</body>
+</html>

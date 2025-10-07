@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ডাক্তার নিবন্ধন - রানীগঞ্জ রয়েল কেয়ার হাসপাতাল</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/forms.css">
+</head>
+<body class="font-inter bg-gradient-to-br from-gray-50 to-green-50 min-h-screen">
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top bg-white shadow-sm" style="backdrop-filter: blur(20px); background: rgba(255, 255, 255, 0.98);">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="dashboard.html">
+                <img src="https://cdn-icons-png.flaticon.com/512/2382/2382533.png" alt="Hospital Logo" class="me-2" style="height: 40px;">
+                <div>
+                    <h5 class="mb-0 text-primary fw-bold">রানীগঞ্জ রয়েল কেয়ার</h5>
+                    <small class="text-muted">ডাক্তার নিবন্ধন সিস্টেম</small>
+                </div>
+            </a>
+            
+            <div class="d-flex align-items-center">
+                <a href="dashboard.html" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-tachometer-alt me-1"></i>ড্যাশবোর্ড
+                </a>
+                <a href="doctor-management.html" class="btn btn-success">
+                    <i class="fas fa-user-md me-1"></i>ডাক্তার তালিকা
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" style="margin-top: 80px; padding: 2rem;">
+        <div class="container-fluid">
+            
+            <!-- Page Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="fw-bold text-dark mb-2">ডাক্তার নিবন্ধন</h2>
+                            <p class="text-muted mb-0">নতুন ডাক্তারের তথ্য এবং যোগ্যতার বিবরণ</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-secondary" onclick="clearForm()">
+                                <i class="fas fa-eraser me-2"></i>ফর্ম পরিষ্কার করুন
+                            </button>
+                            <button class="btn btn-info" onclick="fillSampleData()">
+                                <i class="fas fa-fill-drip me-2"></i>নমুনা ডেটা
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor Registration Form -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-card bg-white rounded-4 shadow-sm border-0 p-4">
+                        <form id="doctorRegistrationForm" class="needs-validation" novalidate>
+                            
+                            <!-- Doctor Photo Upload -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="photo-upload-section text-center p-4 border-2 border-dashed rounded-3" style="border-color: #28a745;">
+                                        <div class="photo-preview mb-3">
+                                            <img id="doctorPhotoPreview" src="https://via.placeholder.com/150x150/28a745/ffffff?text=ডাক্তার" 
+                                                 alt="Doctor Photo" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                                        </div>
+                                        <div class="photo-upload-controls">
+                                            <input type="file" id="doctorPhoto" accept="image/*" class="d-none">
+                                            <button type="button" class="btn btn-success me-2" onclick="document.getElementById('doctorPhoto').click()">
+                                                <i class="fas fa-camera me-2"></i>ছবি আপলোড করুন
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger" onclick="removeDoctorPhoto()">
+                                                <i class="fas fa-trash me-2"></i>ছবি মুছুন
+                                            </button>
+                                        </div>
+                                        <small class="text-muted d-block mt-2">JPG, PNG বা GIF ফরম্যাট, সর্বোচ্চ ২ MB</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Personal Information -->
+                            <div class="form-section mb-5">
+                                <h5 class="fw-bold text-dark mb-4 d-flex align-items-center">
+                                    <i class="fas fa-user-md text-success me-2"></i>ব্যক্তিগত তথ্য
+                                </h5>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="doctorId" class="form-label fw-semibold">ডাক্তার আইডি</label>
+                                        <input type="text" class="form-control" id="doctorId" readonly>
+                                        <small class="text-muted">স্বয়ংক্রিয়ভাবে তৈরি হবে</small>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="title" class="form-label fw-semibold">উপাধি <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="title" required>
+                                            <option value="">নির্বাচন করুন</option>
+                                            <option value="Dr.">ডাঃ</option>
+                                            <option value="Prof. Dr.">প্রফেসর ডাঃ</option>
+                                            <option value="Assoc. Prof. Dr.">সহযোগী অধ্যাপক ডাঃ</option>
+                                            <option value="Asst. Prof. Dr.">সহকারী অধ্যাপক ডাঃ</option>
+                                        </select>
+                                        <div class="invalid-feedback">উপাধি নির্বাচন করুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="firstName" class="form-label fw-semibold">নাম (প্রথম অংশ) <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="firstName" placeholder="প্রথম নাম" required>
+                                        <div class="invalid-feedback">প্রথম নাম লিখুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="lastName" class="form-label fw-semibold">নাম (শেষ অংশ) <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="lastName" placeholder="শেষ নাম" required>
+                                        <div class="invalid-feedback">শেষ নাম লিখুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="dateOfBirth" class="form-label fw-semibold">জন্ম তারিখ <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="dateOfBirth" required>
+                                        <div class="invalid-feedback">জন্ম তারিখ নির্বাচন করুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="gender" class="form-label fw-semibold">লিঙ্গ <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="gender" required>
+                                            <option value="">নির্বাচন করুন</option>
+                                            <option value="male">পুরুষ</option>
+                                            <option value="female">মহিলা</option>
+                                            <option value="other">অন্যান্য</option>
+                                        </select>
+                                        <div class="invalid-feedback">লিঙ্গ নির্বাচন করুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label fw-semibold">মোবাইল নম্বর <span class="text-danger">*</span></label>
+                                        <input type="tel" class="form-control" id="phone" placeholder="01XXXXXXXXX" required>
+                                        <div class="invalid-feedback">বৈধ মোবাইল নম্বর লিখুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label fw-semibold">ইমেইল ঠিকানা <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="email" placeholder="doctor@email.com" required>
+                                        <div class="invalid-feedback">বৈধ ইমেইল ঠিকানা লিখুন</div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <label for="address" class="form-label fw-semibold">ঠিকানা <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="address" rows="3" placeholder="সম্পূর্ণ ঠিকানা লিখুন" required></textarea>
+                                        <div class="invalid-feedback">ঠিকানা লিখুন</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Professional Information -->
+                            <div class="form-section mb-5">
+                                <h5 class="fw-bold text-dark mb-4 d-flex align-items-center">
+                                    <i class="fas fa-stethoscope text-primary me-2"></i>পেশাগত তথ্য
+                                </h5>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="specialization" class="form-label fw-semibold">বিশেষত্ব <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="specialization" required>
+                                            <option value="">নির্বাচন করুন</option>
+                                            <option value="cardiology">কার্ডিওলজি</option>
+                                            <option value="neurology">নিউরোলজি</option>
+                                            <option value="orthopedics">অর্থোপেডিক্স</option>
+                                            <option value="pediatrics">পেডিয়াট্রিক্স</option>
+                                            <option value="gynecology">গাইনোকোলজি</option>
+                                            <option value="dermatology">চর্মরোগ</option>
+                                            <option value="ophthalmology">চক্ষু বিভাগ</option>
+                                            <option value="ent">নাক কান গলা</option>
+                                            <option value="general">সাধারণ চিকিৎসা</option>
+                                            <option value="surgery">সার্জারি</option>
+                                            <option value="anesthesiology">অ্যানেস্থেসিওলজি</option>
+                                            <option value="radiology">রেডিওলজি</option>
+                                        </select>
+                                        <div class="invalid-feedback">বিশেষত্ব নির্বাচন করুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="experience" class="form-label fw-semibold">অভিজ্ঞতা (বছর) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="experience" placeholder="অভিজ্ঞতার বছর" min="0" max="50" required>
+                                        <div class="invalid-feedback">অভিজ্ঞতার বছর লিখুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="licenseNumber" class="form-label fw-semibold">লাইসেন্স নম্বর <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="licenseNumber" placeholder="চিকিৎসক লাইসেন্স নম্বর" required>
+                                        <div class="invalid-feedback">লাইসেন্স নম্বর লিখুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="qualification" class="form-label fw-semibold">যোগ্যতা <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="qualification" placeholder="MBBS, MD, MS ইত্যাদি" required>
+                                        <div class="invalid-feedback">যোগ্যতা লিখুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="university" class="form-label fw-semibold">বিশ্ববিদ্যালয়</label>
+                                        <input type="text" class="form-control" id="university" placeholder="যে বিশ্ববিদ্যালয় থেকে ডিগ্রি">
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="joiningDate" class="form-label fw-semibold">যোগদানের তারিখ <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="joiningDate" required>
+                                        <div class="invalid-feedback">যোগদানের তারিখ নির্বাচন করুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="designation" class="form-label fw-semibold">পদবী <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="designation" required>
+                                            <option value="">নির্বাচন করুন</option>
+                                            <option value="consultant">কনসালট্যান্ট</option>
+                                            <option value="senior_consultant">সিনিয়র কনসালট্যান্ট</option>
+                                            <option value="specialist">স্পেশালিস্ট</option>
+                                            <option value="resident">রেসিডেন্ট</option>
+                                            <option value="intern">ইন্টার্ন</option>
+                                        </select>
+                                        <div class="invalid-feedback">পদবী নির্বাচন করুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="salary" class="form-label fw-semibold">বেতন (₹)</label>
+                                        <input type="number" class="form-control" id="salary" placeholder="মাসিক বেতন">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Schedule Information -->
+                            <div class="form-section mb-5">
+                                <h5 class="fw-bold text-dark mb-4 d-flex align-items-center">
+                                    <i class="fas fa-clock text-warning me-2"></i>সময়সূচী তথ্য
+                                </h5>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="workingDays" class="form-label fw-semibold">কর্মদিবস <span class="text-danger">*</span></label>
+                                        <div class="working-days-container">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="sunday" value="sunday">
+                                                <label class="form-check-label" for="sunday">রবি</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="monday" value="monday">
+                                                <label class="form-check-label" for="monday">সোম</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="tuesday" value="tuesday">
+                                                <label class="form-check-label" for="tuesday">মঙ্গল</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="wednesday" value="wednesday">
+                                                <label class="form-check-label" for="wednesday">বুধ</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="thursday" value="thursday">
+                                                <label class="form-check-label" for="thursday">বৃহস্পতি</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="friday" value="friday">
+                                                <label class="form-check-label" for="friday">শুক্র</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="saturday" value="saturday">
+                                                <label class="form-check-label" for="saturday">শনি</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <label for="startTime" class="form-label fw-semibold">শুরুর সময় <span class="text-danger">*</span></label>
+                                        <input type="time" class="form-control" id="startTime" required>
+                                        <div class="invalid-feedback">শুরুর সময় নির্বাচন করুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-3">
+                                        <label for="endTime" class="form-label fw-semibold">শেষের সময় <span class="text-danger">*</span></label>
+                                        <input type="time" class="form-control" id="endTime" required>
+                                        <div class="invalid-feedback">শেষের সময় নির্বাচন করুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="consultationFee" class="form-label fw-semibold">পরামর্শ ফি (₹) <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="consultationFee" placeholder="পরামর্শের জন্য ফি" required>
+                                        <div class="invalid-feedback">পরামর্শ ফি লিখুন</div>
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="roomNumber" class="form-label fw-semibold">চেম্বার রুম নম্বর</label>
+                                        <input type="text" class="form-control" id="roomNumber" placeholder="চেম্বার রুম নম্বর">
+                                    </div>
+                                    
+                                    <div class="col-md-4">
+                                        <label for="maxPatients" class="form-label fw-semibold">সর্বোচ্চ রোগী (দৈনিক)</label>
+                                        <input type="number" class="form-control" id="maxPatients" placeholder="দৈনিক সর্বোচ্চ রোগী সংখ্যা" min="1" max="100">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Information -->
+                            <div class="form-section mb-5">
+                                <h5 class="fw-bold text-dark mb-4 d-flex align-items-center">
+                                    <i class="fas fa-info-circle text-info me-2"></i>অতিরিক্ত তথ্য
+                                </h5>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="emergencyContact" class="form-label fw-semibold">জরুরি যোগাযোগ</label>
+                                        <input type="tel" class="form-control" id="emergencyContact" placeholder="জরুরি অবস্থায় যোগাযোগের নম্বর">
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="bloodGroup" class="form-label fw-semibold">রক্তের গ্রুপ</label>
+                                        <select class="form-select" id="bloodGroup">
+                                            <option value="">নির্বাচন করুন</option>
+                                            <option value="A+">A+</option>
+                                            <option value="A-">A-</option>
+                                            <option value="B+">B+</option>
+                                            <option value="B-">B-</option>
+                                            <option value="AB+">AB+</option>
+                                            <option value="AB-">AB-</option>
+                                            <option value="O+">O+</option>
+                                            <option value="O-">O-</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <label for="biography" class="form-label fw-semibold">জীবনী/বিশেষত্ব বর্ণনা</label>
+                                        <textarea class="form-control" id="biography" rows="4" placeholder="ডাক্তারের পেশাগত অভিজ্ঞতা, বিশেষত্ব এবং অর্জনের বিবরণ"></textarea>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="languages" class="form-label fw-semibold">ভাষা দক্ষতা</label>
+                                        <input type="text" class="form-control" id="languages" placeholder="বাংলা, ইংরেজি, হিন্দি ইত্যাদি">
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="awards" class="form-label fw-semibold">পুরস্কার/সম্মাননা</label>
+                                        <input type="text" class="form-control" id="awards" placeholder="প্রাপ্ত পুরস্কার বা সম্মাননা">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Buttons -->
+                            <div class="form-section">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button type="button" class="btn btn-outline-secondary btn-lg" onclick="saveDraft()">
+                                        <i class="fas fa-save me-2"></i>ড্রাফট সেভ করুন
+                                    </button>
+                                    
+                                    <div class="d-flex gap-3">
+                                        <button type="button" class="btn btn-outline-danger btn-lg" onclick="cancelRegistration()">
+                                            <i class="fas fa-times me-2"></i>বাতিল
+                                        </button>
+                                        <button type="submit" class="btn btn-success btn-lg px-5">
+                                            <i class="fas fa-user-md me-2"></i>ডাক্তার নিবন্ধন করুন
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doctor List Section -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="table-card bg-white rounded-4 shadow-sm border-0">
+                        <div class="card-header bg-transparent border-0 p-4 pb-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="fw-bold mb-0">সাম্প্রতিক নিবন্ধিত ডাক্তারগণ</h5>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-outline-primary btn-sm" onclick="refreshDoctorList()">
+                                        <i class="fas fa-sync-alt me-1"></i>রিফ্রেশ
+                                    </button>
+                                    <button class="btn btn-success btn-sm" onclick="exportDoctorList()">
+                                        <i class="fas fa-download me-1"></i>এক্সপোর্ট
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>ডাক্তার আইডি</th>
+                                            <th>নাম</th>
+                                            <th>বিশেষত্ব</th>
+                                            <th>অভিজ্ঞতা</th>
+                                            <th>ফি (₹)</th>
+                                            <th>যোগদানের তারিখ</th>
+                                            <th>অবস্থা</th>
+                                            <th>অ্যাকশন</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="doctorListTableBody">
+                                        <!-- Dynamic content will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/doctor-registration.js"></script>
+</body>
+</html>

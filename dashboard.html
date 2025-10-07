@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ড্যাশবোর্ড - Raniganj Royal Care Hospital</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg fixed-top dashboard-navbar">
+        <div class="container-fluid px-4">
+            <!-- Brand -->
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="https://cdn-icons-png.flaticon.com/512/3774/3774299.png" alt="Hospital Logo" class="me-2" style="height: 35px;">
+                <div>
+                    <span class="fw-bold text-primary">Raniganj Royal Care</span>
+                    <small class="d-block text-muted" style="font-size: 0.7rem;">Hospital Management System</small>
+                </div>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="search-container d-none d-md-flex">
+                <div class="input-group">
+                    <span class="input-group-text bg-transparent border-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-0 bg-transparent" placeholder="রোগী, ডাক্তার বা রিপোর্ট খুঁজুন..." id="globalSearch">
+                </div>
+            </div>
+
+            <!-- Right Side Items -->
+            <div class="d-flex align-items-center gap-3">
+                <!-- Notifications -->
+                <div class="dropdown">
+                    <button class="btn btn-link text-decoration-none position-relative" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell fs-5 text-muted"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                            5
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+                        <li class="dropdown-header">
+                            <strong>নোটিফিকেশন</strong>
+                            <span class="badge bg-primary ms-2">5</span>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item notification-item" href="#">
+                                <div class="d-flex">
+                                    <div class="notification-icon bg-success">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <h6 class="mb-1">নতুন রোগী ভর্তি</h6>
+                                        <p class="mb-1 text-muted small">রহিম আহমেদ ভর্তি হয়েছেন</p>
+                                        <small class="text-muted">৫ মিনিট আগে</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item notification-item" href="#">
+                                <div class="d-flex">
+                                    <div class="notification-icon bg-warning">
+                                        <i class="fas fa-pills"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <h6 class="mb-1">স্টক কম</h6>
+                                        <p class="mb-1 text-muted small">প্যারাসিটামল স্টক শেষ</p>
+                                        <small class="text-muted">১০ মিনিট আগে</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item notification-item" href="#">
+                                <div class="d-flex">
+                                    <div class="notification-icon bg-info">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <h6 class="mb-1">নতুন অ্যাপয়েন্টমেন্ট</h6>
+                                        <p class="mb-1 text-muted small">ডা. ফাতেমার সাথে</p>
+                                        <small class="text-muted">১৫ মিনিট আগে</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" href="#">সব দেখুন</a></li>
+                    </ul>
+                </div>
+
+                <!-- User Profile -->
+                <div class="dropdown">
+                    <button class="btn btn-link text-decoration-none d-flex align-items-center" type="button" data-bs-toggle="dropdown">
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Profile" class="rounded-circle me-2" style="width: 35px; height: 35px;">
+                        <div class="text-start d-none d-lg-block">
+                            <div class="fw-medium text-dark user-name">অ্যাডমিন</div>
+                            <small class="text-muted user-role">সিস্টেম অ্যাডমিন</small>
+                        </div>
+                        <i class="fas fa-chevron-down ms-2 text-muted"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i>প্রোফাইল</a></li>
+                        <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>সেটিংস</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>লগআউট</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Navigation Menu -->
+    <nav class="main-navigation">
+        <div class="container-fluid px-4">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link active" href="dashboard.html">
+                        <i class="fas fa-tachometer-alt me-2"></i>ড্যাশবোর্ড
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+                        <i class="fas fa-users me-2"></i>রোগী ব্যবস্থাপনা
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="patient-admission.html">রোগী ভর্তি</a></li>
+                        <li><a class="dropdown-item" href="patient-list.html">রোগীর তালিকা</a></li>
+                        <li><a class="dropdown-item" href="patient-registration.html">নতুন রেজিস্ট্রেশন</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+                        <i class="fas fa-stethoscope me-2"></i>ডাক্তার ব্যবস্থাপনা
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="doctor-registration.html">ডাক্তার নিবন্ধন</a></li>
+                        <li><a class="dropdown-item" href="doctor-list.html">ডাক্তারের তালিকা</a></li>
+                        <li><a class="dropdown-item" href="doctor-schedule.html">সময়সূচী</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="appointments.html">
+                        <i class="fas fa-calendar-alt me-2"></i>অ্যাপয়েন্টমেন্ট
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+                        <i class="fas fa-bed me-2"></i>ওয়ার্ড ব্যবস্থাপনা
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="room-management.html">রুম ব্যবস্থাপনা</a></li>
+                        <li><a class="dropdown-item" href="bed-allocation.html">বেড বরাদ্দ</a></li>
+                        <li><a class="dropdown-item" href="icu-management.html">ICU ব্যবস্থাপনা</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+                        <i class="fas fa-pills me-2"></i>ফার্মেসি
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="pharmacy.html">ওষুধ বিক্রয়</a></li>
+                        <li><a class="dropdown-item" href="stock-management.html">স্টক ব্যবস্থাপনা</a></li>
+                        <li><a class="dropdown-item" href="medicine-inventory.html">ওষুধের তালিকা</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="billing.html">
+                        <i class="fas fa-receipt me-2"></i>বিলিং
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
+                        <i class="fas fa-chart-bar me-2"></i>রিপোর্ট
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="reports.html">সব রিপোর্ট</a></li>
+                        <li><a class="dropdown-item" href="financial-reports.html">আর্থিক রিপোর্ট</a></li>
+                        <li><a class="dropdown-item" href="patient-reports.html">রোগীর রিপোর্ট</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-fluid px-4 py-4">
+            <!-- Welcome Section -->
+            <div class="welcome-section mb-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h2 class="welcome-title">স্বাগতম, <span class="user-name-display">অ্যাডমিন</span></h2>
+                        <p class="welcome-subtitle text-muted">আজকের তারিখ: <span id="currentDate"></span></p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <div class="quick-actions">
+                            <button class="btn btn-primary me-2" onclick="window.location.href='patient-admission.html'">
+                                <i class="fas fa-plus me-2"></i>নতুন রোগী
+                            </button>
+                            <button class="btn btn-success" onclick="window.location.href='appointments.html'">
+                                <i class="fas fa-calendar-plus me-2"></i>অ্যাপয়েন্টমেন্ট
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card bg-primary">
+                        <div class="stat-card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="stat-number text-white mb-1" data-target="1250">0</h3>
+                                    <p class="stat-label text-white-50 mb-0">মোট রোগী</p>
+                                    <small class="stat-change text-white-50">
+                                        <i class="fas fa-arrow-up me-1"></i>+12% গত মাসে
+                                    </small>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card bg-success">
+                        <div class="stat-card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="stat-number text-white mb-1" data-target="45">0</h3>
+                                    <p class="stat-label text-white-50 mb-0">আজকের অ্যাপয়েন্টমেন্ট</p>
+                                    <small class="stat-change text-white-50">
+                                        <i class="fas fa-arrow-up me-1"></i>+8% গতকালের চেয়ে
+                                    </small>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card bg-warning">
+                        <div class="stat-card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="stat-number text-white mb-1" data-target="28">0</h3>
+                                    <p class="stat-label text-white-50 mb-0">ভর্তি রোগী</p>
+                                    <small class="stat-change text-white-50">
+                                        <i class="fas fa-arrow-down me-1"></i>-3% গত সপ্তাহে
+                                    </small>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-bed"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="stat-card bg-info">
+                        <div class="stat-card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h3 class="stat-number text-white mb-1" data-target="85000">0</h3>
+                                    <p class="stat-label text-white-50 mb-0">আজকের আয় (₹)</p>
+                                    <small class="stat-change text-white-50">
+                                        <i class="fas fa-arrow-up me-1"></i>+15% গতকালের চেয়ে
+                                    </small>
+                                </div>
+                                <div class="stat-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts and Analytics -->
+            <div class="row g-4 mb-4">
+                <div class="col-xl-8">
+                    <div class="card chart-card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">রোগী ভর্তির পরিসংখ্যান</h5>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="chartPeriod" id="week" checked>
+                                <label class="btn btn-outline-primary" for="week">সপ্তাহ</label>
+                                <input type="radio" class="btn-check" name="chartPeriod" id="month">
+                                <label class="btn btn-outline-primary" for="month">মাস</label>
+                                <input type="radio" class="btn-check" name="chartPeriod" id="year">
+                                <label class="btn btn-outline-primary" for="year">বছর</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="admissionChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">বিভাগীয় বিতরণ</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="departmentChart" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities and Appointments -->
+            <div class="row g-4">
+                <div class="col-xl-8">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">সাম্প্রতিক কার্যক্রম</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">সব দেখুন</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon bg-success">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <h6 class="mb-1">নতুন রোগী ভর্তি</h6>
+                                        <p class="mb-1 text-muted">রহিম আহমেদ (PT001234) কার্ডিওলজি বিভাগে ভর্তি হয়েছেন</p>
+                                        <small class="text-muted">৫ মিনিট আগে</small>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon bg-primary">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <h6 class="mb-1">অ্যাপয়েন্টমেন্ট সম্পন্ন</h6>
+                                        <p class="mb-1 text-muted">ডা. ফাতেমা খাতুনের সাথে করিম উদ্দিনের অ্যাপয়েন্টমেন্ট</p>
+                                        <small class="text-muted">১০ মিনিট আগে</small>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon bg-warning">
+                                        <i class="fas fa-pills"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <h6 class="mb-1">ওষুধ বিতরণ</h6>
+                                        <p class="mb-1 text-muted">PT001230 এর জন্য প্রেসক্রিপশন অনুযায়ী ওষুধ প্রদান</p>
+                                        <small class="text-muted">১৫ মিনিট আগে</small>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon bg-info">
+                                        <i class="fas fa-file-medical"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <h6 class="mb-1">রিপোর্ট প্রস্তুত</h6>
+                                        <p class="mb-1 text-muted">সালমা বেগমের রক্ত পরীক্ষার রিপোর্ট প্রস্তুত</p>
+                                        <small class="text-muted">২০ মিনিট আগে</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-4">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">আজকের অ্যাপয়েন্টমেন্ট</h5>
+                            <span class="badge bg-primary">৪৫টি</span>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="appointment-list">
+                                <div class="appointment-item">
+                                    <div class="appointment-time">
+                                        <span class="time">৯:০০</span>
+                                        <span class="period">সকাল</span>
+                                    </div>
+                                    <div class="appointment-details">
+                                        <h6 class="patient-name">মোহাম্মদ আলী</h6>
+                                        <p class="doctor-name text-muted mb-0">ডা. আহমেদ হাসান</p>
+                                        <small class="department text-muted">কার্ডিওলজি</small>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="badge bg-success">সম্পন্ন</span>
+                                    </div>
+                                </div>
+                                <div class="appointment-item">
+                                    <div class="appointment-time">
+                                        <span class="time">৯:৩০</span>
+                                        <span class="period">সকাল</span>
+                                    </div>
+                                    <div class="appointment-details">
+                                        <h6 class="patient-name">ফাতেমা খাতুন</h6>
+                                        <p class="doctor-name text-muted mb-0">ডা. রহিমা বেগম</p>
+                                        <small class="department text-muted">গাইনোকোলজি</small>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="badge bg-warning">চলমান</span>
+                                    </div>
+                                </div>
+                                <div class="appointment-item">
+                                    <div class="appointment-time">
+                                        <span class="time">১০:০০</span>
+                                        <span class="period">সকাল</span>
+                                    </div>
+                                    <div class="appointment-details">
+                                        <h6 class="patient-name">আব্দুল করিম</h6>
+                                        <p class="doctor-name text-muted mb-0">ডা. নাসির উদ্দিন</p>
+                                        <small class="department text-muted">অর্থোপেডিক্স</small>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="badge bg-primary">অপেক্ষমাণ</span>
+                                    </div>
+                                </div>
+                                <div class="appointment-item">
+                                    <div class="appointment-time">
+                                        <span class="time">১০:৩০</span>
+                                        <span class="period">সকাল</span>
+                                    </div>
+                                    <div class="appointment-details">
+                                        <h6 class="patient-name">রাশিদা বেগম</h6>
+                                        <p class="doctor-name text-muted mb-0">ডা. সাবিনা ইয়াসমিন</p>
+                                        <small class="department text-muted">পেডিয়াট্রিক্স</small>
+                                    </div>
+                                    <div class="appointment-status">
+                                        <span class="badge bg-primary">অপেক্ষমাণ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="appointments.html" class="btn btn-outline-primary btn-sm">সব অ্যাপয়েন্টমেন্ট দেখুন</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

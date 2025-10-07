@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>স্টাফ ব্যবস্থাপনা - Raniganj Royal Care Hospital</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1400px;
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .header-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        .stats-container {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .form-section {
+            padding: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: white;
+        }
+
+        .btn {
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .badge {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.75rem;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e9ecef;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .photo-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .photo-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #e9ecef;
+        }
+
+        .photo-upload-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: white;
+        }
+
+        .photo-upload:hover .photo-upload-overlay {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .stats-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-card">
+            <!-- Header Section -->
+            <div class="header-section">
+                <div class="header-content">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h1 class="page-title">
+                                <i class="fas fa-users-cog me-3"></i>
+                                স্টাফ ব্যবস্থাপনা
+                            </h1>
+                            <p class="page-subtitle">রানীগঞ্জ রয়েল কেয়ার হাসপাতাল - স্টাফ নিবন্ধন ও ব্যবস্থাপনা সিস্টেম</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-light btn-lg" onclick="window.location.href='dashboard.html'">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                ড্যাশবোর্ডে ফিরুন
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="stats-container">
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-number" id="totalStaff">0</div>
+                            <div class="stat-label">মোট স্টাফ</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);">
+                                <i class="fas fa-user-check"></i>
+                            </div>
+                            <div class="stat-number" id="activeStaff">0</div>
+                            <div class="stat-label">সক্রিয় স্টাফ</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                                <i class="fas fa-user-nurse"></i>
+                            </div>
+                            <div class="stat-number" id="nurseCount">0</div>
+                            <div class="stat-label">নার্স</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="stat-number" id="adminCount">0</div>
+                            <div class="stat-label">প্রশাসনিক</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff Registration Form -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-user-plus text-primary"></i>
+                    নতুন স্টাফ নিবন্ধন
+                </div>
+                
+                <div class="form-container">
+                    <form id="staffRegistrationForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">স্টাফ আইডি</label>
+                                    <input type="text" class="form-control" id="staffId" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">যোগদানের তারিখ</label>
+                                    <input type="date" class="form-control" id="joinDate" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">নাম (বাংলা)</label>
+                                    <input type="text" class="form-control" id="nameBn" placeholder="যেমন: মোহাম্মদ রহিম" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">নাম (ইংরেজি)</label>
+                                    <input type="text" class="form-control" id="nameEn" placeholder="যেমন: Mohammad Rahim" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">পদবী</label>
+                                    <select class="form-control" id="designation" required>
+                                        <option value="">পদবী নির্বাচন করুন</option>
+                                        <option value="নার্স">নার্স</option>
+                                        <option value="সিনিয়র নার্স">সিনিয়র নার্স</option>
+                                        <option value="ওয়ার্ড বয়">ওয়ার্ড বয়</option>
+                                        <option value="রিসেপশনিস্ট">রিসেপশনিস্ট</option>
+                                        <option value="ফার্মাসিস্ট">ফার্মাসিস্ট</option>
+                                        <option value="ল্যাব টেকনিশিয়ান">ল্যাব টেকনিশিয়ান</option>
+                                        <option value="এক্স-রে টেকনিশিয়ান">এক্স-রে টেকনিশিয়ান</option>
+                                        <option value="অ্যাকাউন্টেন্ট">অ্যাকাউন্টেন্ট</option>
+                                        <option value="সিকিউরিটি গার্ড">সিকিউরিটি গার্ড</option>
+                                        <option value="পরিচ্ছন্নতাকর্মী">পরিচ্ছন্নতাকর্মী</option>
+                                        <option value="অ্যাডমিন">অ্যাডমিন</option>
+                                        <option value="ম্যানেজার">ম্যানেজার</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label">বিভাগ</label>
+                                    <select class="form-control" id="department" required>
+                                        <option value="">বিভাগ নির্বাচন করুন</option>
+                                        <option value="জরুরি বিভাগ">জরুরি বিভাগ</option>
+                                        <option value="আইসিইউ">আইসিইউ</option>
+                                        <option value="সাধারণ ওয়ার্ড">সাধারণ ওয়ার্ড</option>
+                                        <option value="অপারেশন থিয়েটার">অপারেশন থিয়েটার</option>
+                                        <option value="ল্যাবরেটরি">ল্যাবরেটরি</option>
+                                        <option value="ফার্মেসি">ফার্মেসি</option>
+                                        <option value="রেডিওলজি">রেডিওলজি</option>
+                                        <option value="প্রশাসন">প্রশাসন</option>
+                                        <option value="অ্যাকাউন্টস">অ্যাকাউন্টস</option>
+                                        <option value="রিসেপশন">রিসেপশন</option>
+                                        <option value="সিকিউরিটি">সিকিউরিটি</option>
+                                        <option value="পরিচ্ছন্নতা">পরিচ্ছন্নতা</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label">শিফট</label>
+                                    <select class="form-control" id="shift" required>
+                                        <option value="">শিফট নির্বাচন করুন</option>
+                                        <option value="সকাল (৮:০০ - ২:০০)">সকাল (৮:০০ - ২:০০)</option>
+                                        <option value="বিকাল (২:০০ - ১০:০০)">বিকাল (২:০০ - ১০:০০)</option>
+                                        <option value="রাত (১০:০০ - ৮:০০)">রাত (১০:০০ - ৮:০০)</option>
+                                        <option value="দিন (৮:০০ - ৮:০০)">দিন (৮:০০ - ৮:০০)</option>
+                                        <option value="সাধারণ (৯:০০ - ৫:০০)">সাধারণ (৯:০০ - ৫:০০)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label">মাসিক বেতন (৳)</label>
+                                    <input type="number" class="form-control" id="salary" placeholder="যেমন: 25000" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-label">স্ট্যাটাস</label>
+                                    <select class="form-control" id="status" required>
+                                        <option value="সক্রিয়">সক্রিয়</option>
+                                        <option value="নিষ্ক্রিয়">নিষ্ক্রিয়</option>
+                                        <option value="ছুটিতে">ছুটিতে</option>
+                                        <option value="বরখাস্ত">বরখাস্ত</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">মোবাইল নম্বর</label>
+                                    <input type="tel" class="form-control" id="mobile" placeholder="যেমন: ০১৭১২৩৪৫৬৭ৈ" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">ইমেইল</label>
+                                    <input type="email" class="form-control" id="email" placeholder="যেমন: rahim@hospital.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="form-label">ঠিকানা</label>
+                                    <textarea class="form-control" id="address" rows="3" placeholder="সম্পূর্ণ ঠিকানা লিখুন" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-label">ছবি আপলোড</label>
+                                    <div class="photo-upload">
+                                        <img id="photoPreview" src="https://via.placeholder.com/100x100/e9ecef/6c757d?text=ছবি" alt="Staff Photo" class="photo-preview">
+                                        <div class="photo-upload-overlay">
+                                            <i class="fas fa-camera"></i>
+                                        </div>
+                                        <input type="file" id="staffPhoto" accept="image/*" style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="form-label">বিশেষ মন্তব্য</label>
+                                    <textarea class="form-control" id="notes" rows="2" placeholder="কোন বিশেষ তথ্য বা মন্তব্য থাকলে লিখুন"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg me-3">
+                                <i class="fas fa-save me-2"></i>
+                                স্টাফ নিবন্ধন করুন
+                            </button>
+                            <button type="reset" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-undo me-2"></i>
+                                রিসেট করুন
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-search text-primary"></i>
+                    স্টাফ খুঁজুন ও ফিল্টার করুন
+                </div>
+                
+                <div class="search-container">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="searchStaff" placeholder="নাম, আইডি বা মোবাইল দিয়ে খুঁজুন">
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" id="filterDepartment">
+                                <option value="">সব বিভাগ</option>
+                                <option value="জরুরি বিভাগ">জরুরি বিভাগ</option>
+                                <option value="আইসিইউ">আইসিইউ</option>
+                                <option value="সাধারণ ওয়ার্ড">সাধারণ ওয়ার্ড</option>
+                                <option value="ল্যাবরেটরি">ল্যাবরেটরি</option>
+                                <option value="ফার্মেসি">ফার্মেসি</option>
+                                <option value="প্রশাসন">প্রশাসন</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" id="filterStatus">
+                                <option value="">সব স্ট্যাটাস</option>
+                                <option value="সক্রিয়">সক্রিয়</option>
+                                <option value="নিষ্ক্রিয়">নিষ্ক্রিয়</option>
+                                <option value="ছুটিতে">ছুটিতে</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control" id="filterShift">
+                                <option value="">সব শিফট</option>
+                                <option value="সকাল">সকাল</option>
+                                <option value="বিকাল">বিকাল</option>
+                                <option value="রাত">রাত</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-success w-100" onclick="exportStaffData()">
+                                <i class="fas fa-download me-2"></i>
+                                এক্সপোর্ট
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff List Table -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-list text-primary"></i>
+                    স্টাফের তালিকা
+                </div>
+                
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ছবি</th>
+                                <th>স্টাফ আইডি</th>
+                                <th>নাম</th>
+                                <th>পদবী</th>
+                                <th>বিভাগ</th>
+                                <th>শিফট</th>
+                                <th>মোবাইল</th>
+                                <th>বেতন</th>
+                                <th>স্ট্যাটাস</th>
+                                <th>অ্যাকশন</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staffTableBody">
+                            <!-- Staff data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/staff-management.js"></script>
+</body>
+</html>

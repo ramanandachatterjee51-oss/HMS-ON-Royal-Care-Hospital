@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সাইন আপ - রানীগঞ্জ রয়েল কেয়ার হাসপাতাল</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #059669;
+            --accent-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --text-color: #334155;
+            --border-color: #e2e8f0;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --border-radius: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--gradient-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1551190822-a9333d879b1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        /* Floating shapes animation */
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            left: 80%;
+            animation-delay: 3s;
+        }
+
+        .shape:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            top: 30%;
+            left: 70%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(180deg);
+            }
+        }
+
+        /* Signup Container */
+        .signup-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem;
+        }
+
+        .signup-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 700px;
+        }
+
+        .signup-image {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.8), rgba(59, 130, 246, 0.8)), url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .signup-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hospital-logo {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .signup-form {
+            padding: 2rem;
+            width: 100%;
+            max-height: 700px;
+            overflow-y: auto;
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .form-subtitle {
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .user-type-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-type-btn {
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .user-type-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .user-type-btn.active {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .user-type-icon {
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+        }
+
+        .form-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin-top: 0.25rem;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak { background: var(--accent-color); }
+        .strength-medium { background: var(--warning-color); }
+        .strength-strong { background: var(--success-color); }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .signup-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-home {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            z-index: 20;
+            transition: all 0.3s ease;
+        }
+
+        .back-home:hover {
+            color: rgba(255, 255, 255, 0.8);
+            transform: translateX(-5px);
+        }
+
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .signup-card {
+                grid-template-columns: 1fr;
+                margin: 1rem;
+            }
+            
+            .signup-image {
+                display: none;
+            }
+            
+            .signup-form {
+                padding: 1.5rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-type-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home -->
+    <a href="index.html" class="back-home">
+        <i class="fas fa-arrow-left me-2"></i>হোমে ফিরুন
+    </a>
+
+    <!-- Floating Shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Signup Container -->
+    <div class="signup-container">
+        <div class="signup-card">
+            <!-- Left Side - Image -->
+            <div class="signup-image">
+                <div class="signup-content">
+                    <div class="hospital-logo">
+                        <i class="fas fa-hospital-alt"></i>
+                    </div>
+                    <h2>রানীগঞ্জ রয়েল কেয়ার হাসপাতালে যোগ দিন</h2>
+                    <p class="mt-3">আধুনিক চিকিৎসা সেবার অংশীদার হন</p>
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-center gap-4 text-center">
+                            <div>
+                                <h4>২৪/৭</h4>
+                                <small>জরুরি সেবা</small>
+                            </div>
+                            <div>
+                                <h4>১৫০+</h4>
+                                <small>অভিজ্ঞ ডাক্তার</small>
+                            </div>
+                            <div>
+                                <h4>৫০,০০০+</h4>
+                                <small>সন্তুষ্ট রোগী</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Signup Form -->
+            <div class="signup-form">
+                <h2 class="form-title">নতুন অ্যাকাউন্ট তৈরি করুন</h2>
+                <p class="form-subtitle">আপনার তথ্য দিয়ে রেজিস্ট্রেশন করুন</p>
+
+                <!-- User Type Selector -->
+                <div class="user-type-selector">
+                    <div class="user-type-btn active" data-type="patient">
+                        <div class="user-type-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>রোগী</div>
+                    </div>
+                    <div class="user-type-btn" data-type="doctor">
+                        <div class="user-type-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div>ডাক্তার</div>
+                    </div>
+                </div>
+
+                <!-- Signup Form -->
+                <form id="signupForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <i class="fas fa-user form-icon"></i>
+                            <input type="text" class="form-control" id="firstName" placeholder="নাম" required>
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-user form-icon"></i>
+                            <input type="text" class="form-control" id="lastName" placeholder="পদবি" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fas fa-envelope form-icon"></i>
+                        <input type="email" class="form-control" id="email" placeholder="ইমেইল অ্যাড্রেস" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <i class="fas fa-phone form-icon"></i>
+                            <input type="tel" class="form-control" id="phone" placeholder="মোবাইল নম্বর" required>
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-calendar form-icon"></i>
+                            <input type="date" class="form-control" id="birthDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <i class="fas fa-venus-mars form-icon"></i>
+                            <select class="form-control" id="gender" required>
+                                <option value="">লিঙ্গ নির্বাচন করুন</option>
+                                <option value="male">পুরুষ</option>
+                                <option value="female">মহিলা</option>
+                                <option value="other">অন্যান্য</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-tint form-icon"></i>
+                            <select class="form-control" id="bloodGroup">
+                                <option value="">রক্তের গ্রুপ (ঐচ্ছিক)</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fas fa-map-marker-alt form-icon"></i>
+                        <textarea class="form-control" id="address" placeholder="ঠিকানা" rows="2" required></textarea>
+                    </div>
+
+                    <!-- Doctor specific fields -->
+                    <div id="doctorFields" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <i class="fas fa-stethoscope form-icon"></i>
+                                <input type="text" class="form-control" id="specialization" placeholder="বিশেষত্ব">
+                            </div>
+                            <div class="form-group">
+                                <i class="fas fa-certificate form-icon"></i>
+                                <input type="text" class="form-control" id="licenseNumber" placeholder="লাইসেন্স নম্বর">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-graduation-cap form-icon"></i>
+                            <input type="text" class="form-control" id="qualification" placeholder="শিক্ষাগত যোগ্যতা">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fas fa-lock form-icon"></i>
+                        <input type="password" class="form-control" id="password" placeholder="পাসওয়ার্ড" required>
+                        <div class="password-strength">
+                            <div class="strength-text">পাসওয়ার্ডের শক্তি: <span id="strengthText">দুর্বল</span></div>
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fas fa-lock form-icon"></i>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="পাসওয়ার্ড নিশ্চিত করুন" required>
+                    </div>
+
+                    <div class="terms-checkbox">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <label for="agreeTerms">আমি <a href="#" style="color: var(--primary-color);">শর্তাবলী</a> এবং <a href="#" style="color: var(--primary-color);">গোপনীয়তা নীতি</a> মেনে নিচ্ছি</label>
+                    </div>
+
+                    <button type="submit" class="signup-btn">
+                        <span class="btn-text">রেজিস্ট্রেশন করুন</span>
+                        <div class="loading"></div>
+                    </button>
+                </form>
+
+                <div class="login-link">
+                    <p>ইতিমধ্যে অ্যাকাউন্ট আছে? <a href="login.html">লগইন করুন</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        let selectedUserType = 'patient';
+
+        // User type selection
+        document.querySelectorAll('.user-type-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.user-type-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedUserType = this.dataset.type;
+                
+                // Show/hide doctor specific fields
+                const doctorFields = document.getElementById('doctorFields');
+                if (selectedUserType === 'doctor') {
+                    doctorFields.style.display = 'block';
+                } else {
+                    doctorFields.style.display = 'none';
+                }
+            });
+        });
+
+        // Password strength checker
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            let text = 'দুর্বল';
+            let className = 'strength-weak';
+            
+            if (password.length >= 8) strength += 25;
+            if (/[A-Z]/.test(password)) strength += 25;
+            if (/[0-9]/.test(password)) strength += 25;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+            
+            if (strength >= 75) {
+                text = 'শক্তিশালী';
+                className = 'strength-strong';
+            } else if (strength >= 50) {
+                text = 'মাঝারি';
+                className = 'strength-medium';
+            }
+            
+            strengthFill.style.width = strength + '%';
+            strengthFill.className = 'strength-fill ' + className;
+            strengthText.textContent = text;
+        });
+
+        // Form submission
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate passwords match
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'পাসওয়ার্ড মিলছে না!',
+                    text: 'পাসওয়ার্ড এবং নিশ্চিতকরণ পাসওয়ার্ড একই হতে হবে।'
+                });
+                return;
+            }
+            
+            // Show loading
+            const btnText = document.querySelector('.btn-text');
+            const loading = document.querySelector('.loading');
+            const signupBtn = document.querySelector('.signup-btn');
+            
+            btnText.style.display = 'none';
+            loading.style.display = 'inline-block';
+            signupBtn.disabled = true;
+            
+            // Collect form data
+            const formData = {
+                userType: selectedUserType,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                birthDate: document.getElementById('birthDate').value,
+                gender: document.getElementById('gender').value,
+                bloodGroup: document.getElementById('bloodGroup').value,
+                address: document.getElementById('address').value,
+                password: password,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add doctor specific fields
+            if (selectedUserType === 'doctor') {
+                formData.specialization = document.getElementById('specialization').value;
+                formData.licenseNumber = document.getElementById('licenseNumber').value;
+                formData.qualification = document.getElementById('qualification').value;
+            }
+            
+            // Generate user ID
+            const userIdPrefix = selectedUserType === 'doctor' ? 'DR' : 'PT';
+            formData.userId = userIdPrefix + Date.now() + Math.floor(Math.random() * 1000);
+            
+            // Simulate registration process
+            setTimeout(() => {
+                // Save to localStorage
+                let users = JSON.parse(localStorage.getItem('hospitalUsers')) || [];
+                
+                // Check if email already exists
+                const existingUser = users.find(user => user.email === formData.email);
+                if (existingUser) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ইমেইল ইতিমধ্যে ব্যবহৃত!',
+                        text: 'এই ইমেইল দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট রয়েছে।'
+                    });
+                } else {
+                    users.push(formData);
+                    localStorage.setItem('hospitalUsers', JSON.stringify(users));
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'রেজিস্ট্রেশন সফল!',
+                        html: `
+                            <p>আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।</p>
+                            <p><strong>ইউজার আইডি:</strong> ${formData.userId}</p>
+                            <p>এখন আপনি লগইন করতে পারেন।</p>
+                        `,
+                        confirmButtonText: 'লগইন পেজে যান'
+                    }).then(() => {
+                        window.location.href = 'login.html';
+                    });
+                }
+                
+                // Hide loading
+                btnText.style.display = 'inline';
+                loading.style.display = 'none';
+                signupBtn.disabled = false;
+            }, 2000);
+        });
+
+        // Form validation
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.style.borderColor = 'var(--accent-color)';
+                } else {
+                    this.style.borderColor = 'var(--border-color)';
+                }
+            });
+        });
+
+        // Phone number formatting
+        document.getElementById('phone').addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            this.value = value;
+        });
+    </script>
+</body>
+</html>

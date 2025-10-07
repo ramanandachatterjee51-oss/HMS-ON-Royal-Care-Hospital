@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অ্যাপয়েন্টমেন্ট ব্যবস্থাপনা - হাসপাতাল ব্যবস্থাপনা সিস্টেম</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --info-color: #17a2b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-container {
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        .management-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border: none;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .filter-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .appointment-table {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+        }
+
+        .table td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-confirmed { background-color: var(--success-color); color: white; }
+        .status-pending { background-color: var(--warning-color); color: white; }
+        .status-cancelled { background-color: var(--danger-color); color: white; }
+        .status-completed { background-color: var(--info-color); color: white; }
+
+        .action-buttons .btn {
+            margin: 2px;
+            border-radius: 8px;
+            padding: 5px 10px;
+        }
+
+        .calendar-view {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-day {
+            border: 1px solid #ddd;
+            padding: 10px;
+            min-height: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+
+        .calendar-day.today {
+            background-color: rgba(52, 152, 219, 0.2);
+            border-color: var(--secondary-color);
+        }
+
+        .appointment-item {
+            background: var(--secondary-color);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin: 1px 0;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin-top: 80px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-hospital-alt text-primary"></i>
+                হাসপাতাল ব্যবস্থাপনা
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="fas fa-tachometer-alt"></i> ড্যাশবোর্ড</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="appointment-management.html"><i class="fas fa-calendar-check"></i> অ্যাপয়েন্টমেন্ট</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="patient-management.html"><i class="fas fa-users"></i> রোগী ব্যবস্থাপনা</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="doctor-appointments.html"><i class="fas fa-user-md"></i> ডাক্তার</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> প্রোফাইল
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog"></i> সেটিংস</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt"></i> লগআউট</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-container">
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-calendar-check fa-2x text-success"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="totalAppointments">0</div>
+                            <div class="text-muted">মোট অ্যাপয়েন্টমেন্ট</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-clock fa-2x text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="pendingAppointments">0</div>
+                            <div class="text-muted">অপেক্ষমাণ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle fa-2x text-info"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="confirmedAppointments">0</div>
+                            <div class="text-muted">নিশ্চিত</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-calendar-day fa-2x text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="todayAppointments">0</div>
+                            <div class="text-muted">আজকের অ্যাপয়েন্টমেন্ট</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="form-label text-white">তারিখ থেকে</label>
+                    <input type="date" class="form-control" id="filterDateFrom">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label text-white">তারিখ পর্যন্ত</label>
+                    <input type="date" class="form-control" id="filterDateTo">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label text-white">বিভাগ</label>
+                    <select class="form-select" id="filterDepartment">
+                        <option value="">সব বিভাগ</option>
+                        <option value="জেনারেল মেডিসিন">জেনারেল মেডিসিন</option>
+                        <option value="সার্জারি">সার্জারি</option>
+                        <option value="কার্ডিওলজি">কার্ডিওলজি</option>
+                        <option value="নিউরোলজি">নিউরোলজি</option>
+                        <option value="অর্থোপেডিক্স">অর্থোপেডিক্স</option>
+                        <option value="গাইনোকোলজি">গাইনোকোলজি</option>
+                        <option value="পেডিয়াট্রিক্স">পেডিয়াট্রিক্স</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label text-white">ডাক্তার</label>
+                    <select class="form-select" id="filterDoctor">
+                        <option value="">সব ডাক্তার</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label text-white">অবস্থা</label>
+                    <select class="form-select" id="filterStatus">
+                        <option value="">সব অবস্থা</option>
+                        <option value="pending">অপেক্ষমাণ</option>
+                        <option value="confirmed">নিশ্চিত</option>
+                        <option value="completed">সম্পন্ন</option>
+                        <option value="cancelled">বাতিল</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label text-white">&nbsp;</label>
+                    <div class="d-grid">
+                        <button class="btn btn-primary" onclick="applyFilters()">
+                            <i class="fas fa-filter"></i> ফিল্টার
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="searchAppointment" placeholder="অ্যাপয়েন্টমেন্ট আইডি বা রোগীর নাম খুঁজুন">
+                </div>
+                <div class="col-md-8">
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-outline-light" onclick="showTableView()">
+                            <i class="fas fa-table"></i> টেবিল ভিউ
+                        </button>
+                        <button class="btn btn-outline-light" onclick="showCalendarView()">
+                            <i class="fas fa-calendar"></i> ক্যালেন্ডার ভিউ
+                        </button>
+                        <button class="btn btn-outline-light" onclick="exportAppointments()">
+                            <i class="fas fa-download"></i> এক্সপোর্ট
+                        </button>
+                        <button class="btn btn-outline-light" onclick="refreshAppointments()">
+                            <i class="fas fa-sync-alt"></i> রিফ্রেশ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar View -->
+        <div id="calendarView" class="calendar-view" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5><i class="fas fa-calendar"></i> ক্যালেন্ডার ভিউ</h5>
+                <div>
+                    <button class="btn btn-outline-primary btn-sm" onclick="previousMonth()">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span id="currentMonth" class="mx-3 fw-bold"></span>
+                    <button class="btn btn-outline-primary btn-sm" onclick="nextMonth()">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="calendarGrid" class="row">
+                <!-- Calendar will be generated here -->
+            </div>
+        </div>
+
+        <!-- Appointments Table -->
+        <div id="tableView" class="appointment-table">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list"></i>
+                        অ্যাপয়েন্টমেন্ট তালিকা
+                    </h5>
+                    <div>
+                        <button class="btn btn-light btn-sm" onclick="showNewAppointmentModal()">
+                            <i class="fas fa-plus"></i> নতুন অ্যাপয়েন্টমেন্ট
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>অ্যাপয়েন্টমেন্ট আইডি</th>
+                            <th>রোগীর নাম</th>
+                            <th>ডাক্তার</th>
+                            <th>বিভাগ</th>
+                            <th>তারিখ ও সময়</th>
+                            <th>অবস্থা</th>
+                            <th>ফি</th>
+                            <th>কার্যক্রম</th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointmentsTableBody">
+                        <!-- Dynamic content will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span id="appointmentCount">0</span> টি অ্যাপয়েন্টমেন্ট পাওয়া গেছে
+                    </div>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0" id="appointmentPagination">
+                            <!-- Pagination will be generated here -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Appointment Modal -->
+    <div class="modal fade" id="newAppointmentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-plus"></i>
+                        নতুন অ্যাপয়েন্টমেন্ট
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newAppointmentForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">রোগীর নাম *</label>
+                                <input type="text" class="form-control" id="newPatientName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ফোন নম্বর *</label>
+                                <input type="tel" class="form-control" id="newPatientPhone" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">বিভাগ *</label>
+                                <select class="form-select" id="newDepartment" required>
+                                    <option value="">নির্বাচন করুন</option>
+                                    <option value="জেনারেল মেডিসিন">জেনারেল মেডিসিন</option>
+                                    <option value="সার্জারি">সার্জারি</option>
+                                    <option value="কার্ডিওলজি">কার্ডিওলজি</option>
+                                    <option value="নিউরোলজি">নিউরোলজি</option>
+                                    <option value="অর্থোপেডিক্স">অর্থোপেডিক্স</option>
+                                    <option value="গাইনোকোলজি">গাইনোকোলজি</option>
+                                    <option value="পেডিয়াট্রিক্স">পেডিয়াট্রিক্স</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ডাক্তার *</label>
+                                <select class="form-select" id="newDoctor" required>
+                                    <option value="">প্রথমে বিভাগ নির্বাচন করুন</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">তারিখ *</label>
+                                <input type="date" class="form-control" id="newAppointmentDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">সময় *</label>
+                                <select class="form-select" id="newAppointmentTime" required>
+                                    <option value="">সময় নির্বাচন করুন</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">সমস্যার বিবরণ</label>
+                            <textarea class="form-control" id="newSymptoms" rows="3"></textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ফি</label>
+                                <input type="number" class="form-control" id="newFee" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">অগ্রিম পেমেন্ট</label>
+                                <input type="number" class="form-control" id="newAdvancePayment">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
+                    <button type="button" class="btn btn-primary" onclick="saveNewAppointment()">
+                        <i class="fas fa-save"></i> সংরক্ষণ করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Appointment Modal -->
+    <div class="modal fade" id="editAppointmentModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-edit"></i>
+                        অ্যাপয়েন্টমেন্ট সম্পাদনা
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAppointmentForm">
+                        <input type="hidden" id="editAppointmentId">
+                        <!-- Similar form fields as new appointment -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">রোগীর নাম *</label>
+                                <input type="text" class="form-control" id="editPatientName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ফোন নম্বর *</label>
+                                <input type="tel" class="form-control" id="editPatientPhone" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">তারিখ *</label>
+                                <input type="date" class="form-control" id="editAppointmentDate" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">সময় *</label>
+                                <input type="time" class="form-control" id="editAppointmentTime" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">অবস্থা</label>
+                            <select class="form-select" id="editStatus">
+                                <option value="pending">অপেক্ষমাণ</option>
+                                <option value="confirmed">নিশ্চিত</option>
+                                <option value="completed">সম্পন্ন</option>
+                                <option value="cancelled">বাতিল</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
+                    <button type="button" class="btn btn-primary" onclick="updateAppointment()">
+                        <i class="fas fa-save"></i> আপডেট করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="js/appointment-management.js"></script>
+</body>
+</html>

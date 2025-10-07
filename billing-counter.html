@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বিলিং কাউন্টার - হাসপাতাল ব্যবস্থাপনা সিস্টেম</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --info-color: #17a2b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-container {
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        .billing-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border: none;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .billing-items {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .item-row {
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .total-section {
+            background: linear-gradient(135deg, var(--success-color), #2ecc71);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .payment-methods {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .payment-method {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .payment-method:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .payment-method.active {
+            border-color: var(--success-color);
+            background: rgba(39, 174, 96, 0.1);
+        }
+
+        .receipt-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+
+        .receipt-total {
+            font-weight: bold;
+            font-size: 1.2em;
+            border-top: 2px solid #333;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .quick-actions {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin-top: 80px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-hospital-alt text-primary"></i>
+                হাসপাতাল ব্যবস্থাপনা
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="fas fa-tachometer-alt"></i> ড্যাশবোর্ড</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="billing-counter.html"><i class="fas fa-cash-register"></i> বিলিং কাউন্টার</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="billing-system.html"><i class="fas fa-file-invoice"></i> বিলিং সিস্টেম</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="billing-history.html"><i class="fas fa-history"></i> বিলিং ইতিহাস</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> প্রোফাইল
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog"></i> সেটিংস</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt"></i> লগআউট</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-container">
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-cash-register fa-2x text-success"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="todayRevenue">৳0</div>
+                            <div class="text-muted">আজকের আয়</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-file-invoice fa-2x text-info"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="todayBills">0</div>
+                            <div class="text-muted">আজকের বিল</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-clock fa-2x text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="pendingBills">0</div>
+                            <div class="text-muted">অপেক্ষমাণ বিল</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-users fa-2x text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="totalPatients">0</div>
+                            <div class="text-muted">মোট রোগী</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Billing Form -->
+            <div class="col-lg-8">
+                <div class="billing-card">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-cash-register"></i>
+                            বিলিং কাউন্টার
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Patient Search -->
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <label class="form-label">রোগী খুঁজুন (নাম, ফোন বা আইডি)</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="patientSearch" placeholder="রোগীর নাম, ফোন নম্বর বা আইডি লিখুন">
+                                    <button class="btn btn-outline-secondary" onclick="searchPatient()">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">বিল আইডি</label>
+                                <input type="text" class="form-control" id="billId" readonly>
+                            </div>
+                        </div>
+
+                        <!-- Patient Information -->
+                        <div id="patientInfo" class="row mb-4" style="display: none;">
+                            <div class="col-md-6">
+                                <h6 class="text-primary">রোগীর তথ্য</h6>
+                                <p><strong>নাম:</strong> <span id="patientName"></span></p>
+                                <p><strong>ফোন:</strong> <span id="patientPhone"></span></p>
+                                <p><strong>বয়স:</strong> <span id="patientAge"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary">চিকিৎসা তথ্য</h6>
+                                <p><strong>বিভাগ:</strong> <span id="patientDepartment"></span></p>
+                                <p><strong>ডাক্তার:</strong> <span id="patientDoctor"></span></p>
+                                <p><strong>রুম:</strong> <span id="patientRoom"></span></p>
+                            </div>
+                        </div>
+
+                        <!-- Billing Items -->
+                        <div class="billing-items">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="text-primary mb-0">বিল আইটেম</h6>
+                                <button class="btn btn-sm btn-outline-primary" onclick="addBillingItem()">
+                                    <i class="fas fa-plus"></i> আইটেম যোগ করুন
+                                </button>
+                            </div>
+                            
+                            <div id="billingItemsList">
+                                <!-- Billing items will be added here -->
+                            </div>
+
+                            <!-- Quick Add Buttons -->
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h6 class="text-muted">দ্রুত যোগ করুন:</h6>
+                                    <div class="btn-group-toggle" data-toggle="buttons">
+                                        <button class="btn btn-outline-info btn-sm me-2 mb-2" onclick="addQuickItem('consultation', 'পরামর্শ ফি', 500)">
+                                            পরামর্শ ফি
+                                        </button>
+                                        <button class="btn btn-outline-info btn-sm me-2 mb-2" onclick="addQuickItem('medicine', 'ওষুধ', 0)">
+                                            ওষুধ
+                                        </button>
+                                        <button class="btn btn-outline-info btn-sm me-2 mb-2" onclick="addQuickItem('test', 'পরীক্ষা', 0)">
+                                            পরীক্ষা
+                                        </button>
+                                        <button class="btn btn-outline-info btn-sm me-2 mb-2" onclick="addQuickItem('room', 'রুম চার্জ', 1000)">
+                                            রুম চার্জ
+                                        </button>
+                                        <button class="btn btn-outline-info btn-sm me-2 mb-2" onclick="addQuickItem('procedure', 'প্রক্রিয়া', 0)">
+                                            প্রক্রিয়া
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Section -->
+                        <div class="total-section">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <label class="form-label text-white">ছাড় (%)</label>
+                                        <input type="number" class="form-control" id="discountPercent" value="0" onchange="calculateTotal()">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2">
+                                        <label class="form-label text-white">ছাড় পরিমাণ (৳)</label>
+                                        <input type="number" class="form-control" id="discountAmount" value="0" onchange="calculateTotal()">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <div class="h6">সাবটোটাল</div>
+                                        <div class="h4" id="subtotal">৳0</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <div class="h6">ছাড়</div>
+                                        <div class="h4" id="totalDiscount">৳0</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <div class="h6">মোট</div>
+                                        <div class="h3" id="grandTotal">৳0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Methods -->
+                        <div class="payment-methods">
+                            <h6 class="text-white mb-3">পেমেন্ট পদ্ধতি</h6>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="payment-method" onclick="selectPaymentMethod('cash')">
+                                        <div class="text-center">
+                                            <i class="fas fa-money-bill-wave fa-2x text-success mb-2"></i>
+                                            <div>নগদ</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="payment-method" onclick="selectPaymentMethod('card')">
+                                        <div class="text-center">
+                                            <i class="fas fa-credit-card fa-2x text-primary mb-2"></i>
+                                            <div>কার্ড</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="payment-method" onclick="selectPaymentMethod('mobile')">
+                                        <div class="text-center">
+                                            <i class="fas fa-mobile-alt fa-2x text-info mb-2"></i>
+                                            <div>মোবাইল ব্যাংকিং</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="payment-method" onclick="selectPaymentMethod('insurance')">
+                                        <div class="text-center">
+                                            <i class="fas fa-shield-alt fa-2x text-warning mb-2"></i>
+                                            <div>বীমা</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Payment Details -->
+                            <div id="paymentDetails" class="mt-3" style="display: none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-white">প্রাপ্ত পরিমাণ</label>
+                                        <input type="number" class="form-control" id="receivedAmount" onchange="calculateChange()">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-white">ফেরত</label>
+                                        <input type="number" class="form-control" id="changeAmount" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="text-end mt-4">
+                            <button class="btn btn-secondary me-2" onclick="clearBill()">
+                                <i class="fas fa-trash"></i> ক্লিয়ার
+                            </button>
+                            <button class="btn btn-warning me-2" onclick="saveDraft()">
+                                <i class="fas fa-save"></i> ড্রাফট সেভ
+                            </button>
+                            <button class="btn btn-primary" onclick="processBill()">
+                                <i class="fas fa-check"></i> বিল প্রসেস করুন
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions & Receipt Preview -->
+            <div class="col-lg-4">
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h5 class="text-white mb-3">
+                        <i class="fas fa-bolt"></i>
+                        দ্রুত কার্যক্রম
+                    </h5>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-light" onclick="showPatientHistory()">
+                            <i class="fas fa-history"></i> রোগীর ইতিহাস
+                        </button>
+                        <button class="btn btn-outline-light" onclick="showPendingBills()">
+                            <i class="fas fa-clock"></i> অপেক্ষমাণ বিল
+                        </button>
+                        <button class="btn btn-outline-light" onclick="showTodayReports()">
+                            <i class="fas fa-chart-bar"></i> আজকের রিপোর্ট
+                        </button>
+                        <button class="btn btn-outline-light" onclick="showInsuranceInfo()">
+                            <i class="fas fa-shield-alt"></i> বীমা তথ্য
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Receipt Preview -->
+                <div class="receipt-preview">
+                    <div class="receipt-header">
+                        <h5>হাসপাতাল ব্যবস্থাপনা সিস্টেম</h5>
+                        <p class="mb-0">বিল রসিদ</p>
+                        <small>বিল নং: <span id="receiptBillId"></span></small><br>
+                        <small>তারিখ: <span id="receiptDate"></span></small>
+                    </div>
+                    <div id="receiptItems">
+                        <!-- Receipt items will be shown here -->
+                    </div>
+                    <div class="receipt-total">
+                        <div class="receipt-item">
+                            <span>সাবটোটাল:</span>
+                            <span id="receiptSubtotal">৳0</span>
+                        </div>
+                        <div class="receipt-item">
+                            <span>ছাড়:</span>
+                            <span id="receiptDiscount">৳0</span>
+                        </div>
+                        <div class="receipt-item receipt-total">
+                            <span>মোট:</span>
+                            <span id="receiptTotal">৳0</span>
+                        </div>
+                    </div>
+                    <div class="text-center mt-3">
+                        <button class="btn btn-sm btn-outline-primary" onclick="printReceipt()">
+                            <i class="fas fa-print"></i> প্রিন্ট
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="js/billing-counter.js"></script>
+</body>
+</html>

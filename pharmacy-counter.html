@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ফার্মেসি কাউন্টার - হাসপাতাল ব্যবস্থাপনা সিস্টেম</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --info-color: #17a2b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-container {
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        .pharmacy-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border: none;
+        }
+
+        .medicine-search {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .medicine-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .medicine-item:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .medicine-item.selected {
+            border-color: var(--success-color);
+            background: rgba(39, 174, 96, 0.1);
+        }
+
+        .prescription-area {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .prescription-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .bill-summary {
+            background: linear-gradient(135deg, var(--success-color), #2ecc71);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .medicine-category {
+            background: var(--info-color);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .stock-status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .stock-available { background-color: var(--success-color); color: white; }
+        .stock-low { background-color: var(--warning-color); color: white; }
+        .stock-out { background-color: var(--danger-color); color: white; }
+
+        .prescription-upload {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .prescription-upload:hover {
+            border-color: var(--secondary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin-top: 80px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-hospital-alt text-primary"></i>
+                হাসপাতাল ব্যবস্থাপনা
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="fas fa-tachometer-alt"></i> ড্যাশবোর্ড</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="pharmacy-counter.html"><i class="fas fa-pills"></i> ফার্মেসি কাউন্টার</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pharmacy-tracking.html"><i class="fas fa-truck"></i> ফার্মেসি ট্র্যাকিং</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="stock-management.html"><i class="fas fa-boxes"></i> স্টক ব্যবস্থাপনা</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> প্রোফাইল
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog"></i> সেটিংস</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt"></i> লগআউট</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-container">
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-pills fa-2x text-success"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="todaySales">৳0</div>
+                            <div class="text-muted">আজকের বিক্রয়</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-prescription-bottle-alt fa-2x text-info"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="totalMedicines">0</div>
+                            <div class="text-muted">মোট ওষুধ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle fa-2x text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="lowStockItems">0</div>
+                            <div class="text-muted">কম স্টক</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 mb-3">
+                <div class="stats-card">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-users fa-2x text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold fs-4" id="todayCustomers">0</div>
+                            <div class="text-muted">আজকের গ্রাহক</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Medicine Selection -->
+            <div class="col-lg-8">
+                <div class="pharmacy-card">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-pills"></i>
+                            ফার্মেসি কাউন্টার
+                        </h4>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Customer Information -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">গ্রাহকের নাম</label>
+                                <input type="text" class="form-control" id="customerName" placeholder="গ্রাহকের নাম লিখুন">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">ফোন নম্বর</label>
+                                <input type="tel" class="form-control" id="customerPhone" placeholder="ফোন নম্বর">
+                            </div>
+                        </div>
+
+                        <!-- Prescription Upload -->
+                        <div class="prescription-upload mb-4" onclick="document.getElementById('prescriptionInput').click()">
+                            <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">প্রেসক্রিপশন আপলোড করুন</p>
+                            <small class="text-muted">JPG, PNG, PDF (সর্বোচ্চ 5MB)</small>
+                        </div>
+                        <input type="file" id="prescriptionInput" accept="image/*,.pdf" style="display: none;" onchange="uploadPrescription(this)">
+
+                        <!-- Medicine Search -->
+                        <div class="medicine-search">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label class="form-label">ওষুধ খুঁজুন</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="medicineSearch" placeholder="ওষুধের নাম বা জেনেরিক নাম">
+                                        <button class="btn btn-outline-secondary" onclick="searchMedicines()">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">ক্যাটেগরি</label>
+                                    <select class="form-select" id="medicineCategory" onchange="filterByCategory()">
+                                        <option value="">সব ক্যাটেগরি</option>
+                                        <option value="ট্যাবলেট">ট্যাবলেট</option>
+                                        <option value="ক্যাপসুল">ক্যাপসুল</option>
+                                        <option value="সিরাপ">সিরাপ</option>
+                                        <option value="ইনজেকশন">ইনজেকশন</option>
+                                        <option value="ক্রিম">ক্রিম</option>
+                                        <option value="ড্রপস">ড্রপস</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Medicine List -->
+                            <div id="medicineList" class="mt-3">
+                                <!-- Medicine items will be displayed here -->
+                            </div>
+                        </div>
+
+                        <!-- Selected Medicines -->
+                        <div class="prescription-area">
+                            <h6 class="text-white mb-3">নির্বাচিত ওষুধ</h6>
+                            <div id="selectedMedicines">
+                                <!-- Selected medicines will be shown here -->
+                            </div>
+                            <div class="text-center mt-3" id="emptyCart" style="display: none;">
+                                <i class="fas fa-shopping-cart fa-3x text-white-50 mb-3"></i>
+                                <p class="text-white-50">কোন ওষুধ নির্বাচিত নেই</p>
+                            </div>
+                        </div>
+
+                        <!-- Bill Summary -->
+                        <div class="bill-summary">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <div class="h6">আইটেম</div>
+                                        <div class="h4" id="totalItems">0</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <div class="h6">সাবটোটাল</div>
+                                        <div class="h4" id="subtotal">৳0</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <div class="h6">ছাড়</div>
+                                        <div class="h4" id="discount">৳0</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="text-center">
+                                        <div class="h6">মোট</div>
+                                        <div class="h3" id="grandTotal">৳0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label class="form-label text-white">ছাড় (%)</label>
+                                    <input type="number" class="form-control" id="discountPercent" value="0" onchange="calculateTotal()">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-white">পেমেন্ট পদ্ধতি</label>
+                                    <select class="form-select" id="paymentMethod">
+                                        <option value="cash">নগদ</option>
+                                        <option value="card">কার্ড</option>
+                                        <option value="mobile">মোবাইল ব্যাংকিং</option>
+                                        <option value="insurance">বীমা</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="text-end">
+                            <button class="btn btn-secondary me-2" onclick="clearCart()">
+                                <i class="fas fa-trash"></i> ক্লিয়ার
+                            </button>
+                            <button class="btn btn-warning me-2" onclick="holdBill()">
+                                <i class="fas fa-pause"></i> হোল্ড
+                            </button>
+                            <button class="btn btn-primary" onclick="processSale()">
+                                <i class="fas fa-check"></i> বিক্রয় সম্পন্ন
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions & Popular Medicines -->
+            <div class="col-lg-4">
+                <!-- Quick Actions -->
+                <div class="pharmacy-card mb-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-bolt"></i>
+                            দ্রুত কার্যক্রম
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-primary" onclick="showHeldBills()">
+                                <i class="fas fa-pause"></i> হোল্ড বিল
+                            </button>
+                            <button class="btn btn-outline-success" onclick="showTodaySales()">
+                                <i class="fas fa-chart-line"></i> আজকের বিক্রয়
+                            </button>
+                            <button class="btn btn-outline-info" onclick="checkStock()">
+                                <i class="fas fa-boxes"></i> স্টক চেক
+                            </button>
+                            <button class="btn btn-outline-warning" onclick="showExpiredMedicines()">
+                                <i class="fas fa-exclamation-triangle"></i> মেয়াদোত্তীর্ণ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Medicines -->
+                <div class="pharmacy-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-star"></i>
+                            জনপ্রিয় ওষুধ
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="popularMedicines">
+                            <!-- Popular medicines will be shown here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medicine Details Modal -->
+    <div class="modal fade" id="medicineDetailsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-pills"></i>
+                        ওষুধের বিস্তারিত
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>নাম:</strong> <span id="modalMedicineName"></span></p>
+                            <p><strong>জেনেরিক:</strong> <span id="modalMedicineGeneric"></span></p>
+                            <p><strong>ক্যাটেগরি:</strong> <span id="modalMedicineCategory"></span></p>
+                            <p><strong>কোম্পানি:</strong> <span id="modalMedicineCompany"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>দাম:</strong> ৳<span id="modalMedicinePrice"></span></p>
+                            <p><strong>স্টক:</strong> <span id="modalMedicineStock"></span></p>
+                            <p><strong>মেয়াদ:</strong> <span id="modalMedicineExpiry"></span></p>
+                            <p><strong>ব্যাচ:</strong> <span id="modalMedicineBatch"></span></p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">পরিমাণ</label>
+                        <div class="input-group">
+                            <button class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                            <input type="number" class="form-control text-center" id="modalQuantity" value="1" min="1">
+                            <button class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">নির্দেশনা</label>
+                        <textarea class="form-control" id="modalInstructions" rows="2" placeholder="ব্যবহারের নির্দেশনা"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">বাতিল</button>
+                    <button type="button" class="btn btn-primary" onclick="addToCart()">
+                        <i class="fas fa-cart-plus"></i> কার্টে যোগ করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="js/pharmacy-counter.js"></script>
+</body>
+</html>

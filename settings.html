@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সেটিংস - রানীগঞ্জ রয়েল কেয়ার হাসপাতাল</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #059669;
+            --accent-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+            --light-color: #f8fafc;
+            --dark-color: #1f2937;
+            --text-color: #374151;
+            --border-color: #e5e7eb;
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .settings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .header-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .settings-content {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        .settings-nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+        }
+
+        .nav-item {
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-item:hover {
+            background: var(--light-color);
+        }
+
+        .nav-item.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .settings-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .panel-section {
+            display: none;
+        }
+
+        .panel-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+            outline: none;
+        }
+
+        .form-switch {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--light-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .switch-input {
+            width: 50px;
+            height: 25px;
+            background: #ccc;
+            border-radius: 25px;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .switch-input.active {
+            background: var(--primary-color);
+        }
+
+        .switch-slider {
+            width: 21px;
+            height: 21px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: var(--transition);
+        }
+
+        .switch-input.active .switch-slider {
+            transform: translateX(25px);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        .btn-danger {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        .info-card {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .warning-card {
+            background: #fefce8;
+            border: 1px solid #eab308;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .danger-card {
+            background: #fef2f2;
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .color-picker {
+            width: 50px;
+            height: 40px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .backup-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-role-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .settings-container {
+                padding: 1rem;
+            }
+
+            .settings-content {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <!-- Header Section -->
+        <div class="header-section" data-aos="fade-down">
+            <h1 class="page-title">
+                <i class="fas fa-cog"></i>
+                সেটিংস
+            </h1>
+            <p>হাসপাতাল ব্যবস্থাপনা সিস্টেমের কনফিগারেশন</p>
+        </div>
+
+        <div class="settings-content">
+            <!-- Settings Navigation -->
+            <div class="settings-nav" data-aos="fade-right">
+                <div class="nav-item active" onclick="showPanel('general')">
+                    <i class="fas fa-sliders-h"></i>
+                    <span>সাধারণ</span>
+                </div>
+                <div class="nav-item" onclick="showPanel('hospital')">
+                    <i class="fas fa-hospital"></i>
+                    <span>হাসপাতাল তথ্য</span>
+                </div>
+                <div class="nav-item" onclick="showPanel('users')">
+                    <i class="fas fa-users"></i>
+                    <span>ব্যবহারকারী</span>
+                </div>
+                <div class="nav-item" onclick="showPanel('notifications')">
+                    <i class="fas fa-bell"></i>
+                    <span>নোটিফিকেশন</span>
+                </div>
+                <div class="nav-item" onclick="showPanel('appearance')">
+                    <i class="fas fa-palette"></i>
+                    <span>চেহারা</span>
+                </div>
+                <div class="nav-item" onclick="showPanel('backup')">
+                    <i class="fas fa-database"></i>
+                    <span>ব্যাকআপ</span>
+                </div>
+                <div class="nav-item" onclick="showPanel('security')">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>নিরাপত্তা</span>
+                </div>
+                <div class="nav-item" onclick="showPanel('system')">
+                    <i class="fas fa-server"></i>
+                    <span>সিস্টেম</span>
+                </div>
+            </div>
+
+            <!-- Settings Panel -->
+            <div class="settings-panel" data-aos="fade-left">
+                <!-- General Settings -->
+                <div class="panel-section active" id="general">
+                    <h2 class="section-title">
+                        <i class="fas fa-sliders-h"></i>
+                        সাধারণ সেটিংস
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">ভাষা</label>
+                        <select class="form-select" id="language">
+                            <option value="bn" selected>বাংলা</option>
+                            <option value="en">English</option>
+                            <option value="hi">हिन्दी</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">সময় অঞ্চল</label>
+                        <select class="form-select" id="timezone">
+                            <option value="Asia/Kolkata" selected>Asia/Kolkata (IST)</option>
+                            <option value="Asia/Dhaka">Asia/Dhaka (BST)</option>
+                            <option value="UTC">UTC</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">তারিখ ফরম্যাট</label>
+                        <select class="form-select" id="dateFormat">
+                            <option value="dd/mm/yyyy" selected>DD/MM/YYYY</option>
+                            <option value="mm/dd/yyyy">MM/DD/YYYY</option>
+                            <option value="yyyy-mm-dd">YYYY-MM-DD</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">মুদ্রা</label>
+                        <select class="form-select" id="currency">
+                            <option value="INR" selected>ভারতীয় রুপি (₹)</option>
+                            <option value="BDT">বাংলাদেশী টাকা (৳)</option>
+                            <option value="USD">US Dollar ($)</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveGeneralSettings()">
+                        <i class="fas fa-save"></i> সংরক্ষণ করুন
+                    </button>
+                </div>
+
+                <!-- Hospital Information -->
+                <div class="panel-section" id="hospital">
+                    <h2 class="section-title">
+                        <i class="fas fa-hospital"></i>
+                        হাসপাতালের তথ্য
+                    </h2>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">হাসপাতালের নাম</label>
+                                <input type="text" class="form-control" id="hospitalName" value="রানীগঞ্জ রয়েল কেয়ার হাসপাতাল">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">রেজিস্ট্রেশন নম্বর</label>
+                                <input type="text" class="form-control" id="registrationNumber" value="REG123456789">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">ঠিকানা</label>
+                        <textarea class="form-control" id="hospitalAddress" rows="3">রানীগঞ্জ, বর্ধমান, পশ্চিমবঙ্গ - ৭১৩৩৪৭</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">ফোন নম্বর</label>
+                                <input type="tel" class="form-control" id="hospitalPhone" value="+91 98765 43210">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">ইমেইল</label>
+                                <input type="email" class="form-control" id="hospitalEmail" value="info@raniganjroyalcare.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">ওয়েবসাইট</label>
+                                <input type="url" class="form-control" id="hospitalWebsite" value="https://raniganjroyalcare.com">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">লাইসেন্স নম্বর</label>
+                                <input type="text" class="form-control" id="licenseNumber" value="LIC987654321">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveHospitalInfo()">
+                        <i class="fas fa-save"></i> সংরক্ষণ করুন
+                    </button>
+                </div>
+
+                <!-- User Management -->
+                <div class="panel-section" id="users">
+                    <h2 class="section-title">
+                        <i class="fas fa-users"></i>
+                        ব্যবহারকারী ব্যবস্থাপনা
+                    </h2>
+
+                    <div class="user-role-card">
+                        <h5>অ্যাডমিন</h5>
+                        <p>সম্পূর্ণ সিস্টেম অ্যাক্সেস</p>
+                        <div>
+                            <button class="btn btn-secondary" onclick="manageUsers('admin')">ব্যবস্থাপনা</button>
+                            <button class="btn btn-primary" onclick="addUser('admin')">নতুন যোগ করুন</button>
+                        </div>
+                    </div>
+
+                    <div class="user-role-card">
+                        <h5>ডাক্তার</h5>
+                        <p>রোগী ও চিকিৎসা সংক্রান্ত অ্যাক্সেস</p>
+                        <div>
+                            <button class="btn btn-secondary" onclick="manageUsers('doctor')">ব্যবস্থাপনা</button>
+                            <button class="btn btn-primary" onclick="addUser('doctor')">নতুন যোগ করুন</button>
+                        </div>
+                    </div>
+
+                    <div class="user-role-card">
+                        <h5>স্টাফ</h5>
+                        <p>নির্দিষ্ট বিভাগীয় অ্যাক্সেস</p>
+                        <div>
+                            <button class="btn btn-secondary" onclick="manageUsers('staff')">ব্যবস্থাপনা</button>
+                            <button class="btn btn-primary" onclick="addUser('staff')">নতুন যোগ করুন</button>
+                        </div>
+                    </div>
+
+                    <div class="user-role-card">
+                        <h5>রোগী</h5>
+                        <p>ব্যক্তিগত তথ্য ও অ্যাপয়েন্টমেন্ট অ্যাক্সেস</p>
+                        <div>
+                            <button class="btn btn-secondary" onclick="manageUsers('patient')">ব্যবস্থাপনা</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Settings -->
+                <div class="panel-section" id="notifications">
+                    <h2 class="section-title">
+                        <i class="fas fa-bell"></i>
+                        নোটিফিকেশন সেটিংস
+                    </h2>
+
+                    <div class="form-switch">
+                        <div class="switch-input active" onclick="toggleSwitch(this)">
+                            <div class="switch-slider"></div>
+                        </div>
+                        <div>
+                            <strong>ইমেইল নোটিফিকেশন</strong>
+                            <p class="mb-0 text-muted">নতুন অ্যাপয়েন্টমেন্ট ও আপডেটের জন্য ইমেইল পাঠান</p>
+                        </div>
+                    </div>
+
+                    <div class="form-switch">
+                        <div class="switch-input active" onclick="toggleSwitch(this)">
+                            <div class="switch-slider"></div>
+                        </div>
+                        <div>
+                            <strong>SMS নোটিফিকেশন</strong>
+                            <p class="mb-0 text-muted">জরুরি আপডেটের জন্য SMS পাঠান</p>
+                        </div>
+                    </div>
+
+                    <div class="form-switch">
+                        <div class="switch-input" onclick="toggleSwitch(this)">
+                            <div class="switch-slider"></div>
+                        </div>
+                        <div>
+                            <strong>পুশ নোটিফিকেশন</strong>
+                            <p class="mb-0 text-muted">ব্রাউজার পুশ নোটিফিকেশন সক্রিয় করুন</p>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveNotificationSettings()">
+                        <i class="fas fa-save"></i> সংরক্ষণ করুন
+                    </button>
+                </div>
+
+                <!-- Appearance Settings -->
+                <div class="panel-section" id="appearance">
+                    <h2 class="section-title">
+                        <i class="fas fa-palette"></i>
+                        চেহারা সেটিংস
+                    </h2>
+
+                    <div class="form-group">
+                        <label class="form-label">থিম</label>
+                        <select class="form-select" id="theme">
+                            <option value="light" selected>হালকা</option>
+                            <option value="dark">গাঢ়</option>
+                            <option value="auto">স্বয়ংক্রিয়</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">প্রাথমিক রঙ</label>
+                        <input type="color" class="color-picker" id="primaryColor" value="#6366f1">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">দ্বিতীয় রঙ</label>
+                        <input type="color" class="color-picker" id="secondaryColor" value="#059669">
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveAppearanceSettings()">
+                        <i class="fas fa-save"></i> সংরক্ষণ করুন
+                    </button>
+                </div>
+
+                <!-- Backup Settings -->
+                <div class="panel-section" id="backup">
+                    <h2 class="section-title">
+                        <i class="fas fa-database"></i>
+                        ব্যাকআপ ও পুনরুদ্ধার
+                    </h2>
+
+                    <div class="info-card">
+                        <h6><i class="fas fa-info-circle"></i> স্বয়ংক্রিয় ব্যাকআপ</h6>
+                        <p class="mb-0">সিস্টেম প্রতিদিন রাত ২টায় স্বয়ংক্রিয়ভাবে ব্যাকআপ তৈরি করে।</p>
+                    </div>
+
+                    <div class="backup-item">
+                        <div>
+                            <strong>সর্বশেষ ব্যাকআপ</strong>
+                            <p class="mb-0 text-muted">আজ, রাত ২:০০ AM</p>
+                        </div>
+                        <button class="btn btn-secondary" onclick="downloadBackup('latest')">ডাউনলোড</button>
+                    </div>
+
+                    <div class="backup-item">
+                        <div>
+                            <strong>গতকালের ব্যাকআপ</strong>
+                            <p class="mb-0 text-muted">গতকাল, রাত ২:০০ AM</p>
+                        </div>
+                        <button class="btn btn-secondary" onclick="downloadBackup('yesterday')">ডাউনলোড</button>
+                    </div>
+
+                    <div class="mt-3">
+                        <button class="btn btn-primary" onclick="createBackup()">
+                            <i class="fas fa-download"></i> এখনই ব্যাকআপ তৈরি করুন
+                        </button>
+                        <button class="btn btn-secondary" onclick="restoreBackup()">
+                            <i class="fas fa-upload"></i> ব্যাকআপ পুনরুদ্ধার করুন
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="panel-section" id="security">
+                    <h2 class="section-title">
+                        <i class="fas fa-shield-alt"></i>
+                        নিরাপত্তা সেটিংস
+                    </h2>
+
+                    <div class="warning-card">
+                        <h6><i class="fas fa-exclamation-triangle"></i> পাসওয়ার্ড নীতি</h6>
+                        <p class="mb-0">সকল পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে এবং বিশেষ চিহ্ন থাকতে হবে।</p>
+                    </div>
+
+                    <div class="form-switch">
+                        <div class="switch-input active" onclick="toggleSwitch(this)">
+                            <div class="switch-slider"></div>
+                        </div>
+                        <div>
+                            <strong>দুই-ফ্যাক্টর প্রমাণীকরণ</strong>
+                            <p class="mb-0 text-muted">অতিরিক্ত নিরাপত্তার জন্য 2FA সক্রিয় করুন</p>
+                        </div>
+                    </div>
+
+                    <div class="form-switch">
+                        <div class="switch-input active" onclick="toggleSwitch(this)">
+                            <div class="switch-slider"></div>
+                        </div>
+                        <div>
+                            <strong>লগইন লগ</strong>
+                            <p class="mb-0 text-muted">সকল লগইন কার্যক্রম রেকর্ড রাখুন</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">সেশন টাইমআউট (মিনিট)</label>
+                        <input type="number" class="form-control" id="sessionTimeout" value="30" min="5" max="120">
+                    </div>
+
+                    <button class="btn btn-primary" onclick="saveSecuritySettings()">
+                        <i class="fas fa-save"></i> সংরক্ষণ করুন
+                    </button>
+                </div>
+
+                <!-- System Settings -->
+                <div class="panel-section" id="system">
+                    <h2 class="section-title">
+                        <i class="fas fa-server"></i>
+                        সিস্টেম তথ্য
+                    </h2>
+
+                    <div class="info-card">
+                        <h6>সিস্টেম ভার্সন</h6>
+                        <p class="mb-0">HMS v2.1.0</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h6>সর্বশেষ আপডেট</h6>
+                        <p class="mb-0">১৫ নভেম্বর, ২০২৪</p>
+                    </div>
+
+                    <div class="info-card">
+                        <h6>ডাটাবেস সাইজ</h6>
+                        <p class="mb-0">২৫.৬ MB</p>
+                    </div>
+
+                    <div class="danger-card">
+                        <h6><i class="fas fa-exclamation-triangle"></i> বিপজ্জনক অঞ্চল</h6>
+                        <p>নিচের কার্যক্রমগুলো সাবধানে করুন।</p>
+                        <button class="btn btn-danger" onclick="clearCache()">
+                            <i class="fas fa-trash"></i> ক্যাশ পরিষ্কার করুন
+                        </button>
+                        <button class="btn btn-danger" onclick="resetSystem()">
+                            <i class="fas fa-redo"></i> সিস্টেম রিসেট
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/settings-new.js"></script>
+</body>
+</html>

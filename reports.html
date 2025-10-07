@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রিপোর্ট ও অ্যানালিটিক্স - রানীগঞ্জ রয়েল কেয়ার হাসপাতাল</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #1e40af;
+            --secondary-color: #059669;
+            --accent-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+            --light-color: #eff6ff;
+            --dark-color: #1f2937;
+            --text-color: #374151;
+            --border-color: #e5e7eb;
+            --gradient-primary: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .reports-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            min-height: 100vh;
+        }
+
+        .header-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .filters-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(30, 64, 175, 0.25);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .growth-indicator {
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        .growth-positive {
+            color: var(--success-color);
+        }
+
+        .growth-negative {
+            color: var(--accent-color);
+        }
+
+        .reports-table {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-export {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-export:hover {
+            transform: translateY(-1px);
+        }
+
+        .table-responsive {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table {
+            margin: 0;
+        }
+
+        .table th {
+            background: var(--light-color);
+            border: none;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .table td {
+            border-color: var(--border-color);
+            vertical-align: middle;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .reports-container {
+                padding: 1rem;
+            }
+
+            .filter-row {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                min-width: 100%;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="reports-container">
+        <!-- Header Section -->
+        <div class="header-section" data-aos="fade-down">
+            <h1 class="page-title">
+                <i class="fas fa-chart-bar"></i>
+                রিপোর্ট ও অ্যানালিটিক্স
+            </h1>
+            <p>হাসপাতালের বিস্তারিত রিপোর্ট ও পরিসংখ্যান</p>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section" data-aos="fade-up">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label class="form-label">রিপোর্টের ধরন</label>
+                    <select class="form-select" id="reportType">
+                        <option value="overview">সার্বিক পরিস্থিতি</option>
+                        <option value="appointments">অ্যাপয়েন্টমেন্ট</option>
+                        <option value="pharmacy">ফার্মেসি</option>
+                        <option value="rooms">রুম ব্যবস্থাপনা</option>
+                        <option value="financial">আর্থিক</option>
+                        <option value="stock">স্টক</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="form-label">সময়কাল</label>
+                    <select class="form-select" id="timePeriod">
+                        <option value="today">আজ</option>
+                        <option value="week">এই সপ্তাহ</option>
+                        <option value="month">এই মাস</option>
+                        <option value="quarter">এই কোয়ার্টার</option>
+                        <option value="year">এই বছর</option>
+                        <option value="custom">কাস্টম</option>
+                    </select>
+                </div>
+                <div class="filter-group" id="customDateRange" style="display: none;">
+                    <label class="form-label">তারিখ থেকে</label>
+                    <input type="date" class="form-control" id="startDate">
+                </div>
+                <div class="filter-group" id="customDateRangeTo" style="display: none;">
+                    <label class="form-label">তারিখ পর্যন্ত</label>
+                    <input type="date" class="form-control" id="endDate">
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <i class="fas fa-search"></i> রিপোর্ট তৈরি করুন
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards" data-aos="fade-up" data-aos-delay="100">
+            <div class="summary-card">
+                <div class="summary-value" style="color: var(--primary-color);" id="totalRevenue">৳0</div>
+                <div class="summary-label">মোট আয়</div>
+                <div class="growth-indicator growth-positive" id="revenueGrowth">+0% গত মাসের তুলনায়</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" style="color: var(--success-color);" id="totalAppointments">0</div>
+                <div class="summary-label">মোট অ্যাপয়েন্টমেন্ট</div>
+                <div class="growth-indicator growth-positive" id="appointmentsGrowth">+0% গত মাসের তুলনায়</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" style="color: var(--warning-color);" id="totalPatients">0</div>
+                <div class="summary-label">মোট রোগী</div>
+                <div class="growth-indicator growth-positive" id="patientsGrowth">+0% গত মাসের তুলনায়</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" style="color: var(--secondary-color);" id="occupancyRate">0%</div>
+                <div class="summary-label">রুম দখলের হার</div>
+                <div class="growth-indicator growth-positive" id="occupancyGrowth">+0% গত মাসের তুলনায়</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid" data-aos="fade-up" data-aos-delay="200">
+            <div class="chart-card">
+                <h3 class="chart-title">আয়ের ট্রেন্ড</h3>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">বিভাগীয় বিতরণ</h3>
+                <div class="chart-container">
+                    <canvas id="departmentChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">অ্যাপয়েন্টমেন্ট পরিসংখ্যান</h3>
+                <div class="chart-container">
+                    <canvas id="appointmentChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">রুম ব্যবহার</h3>
+                <div class="chart-container">
+                    <canvas id="roomUsageChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Table -->
+        <div class="reports-table" data-aos="fade-up" data-aos-delay="300">
+            <div class="table-header">
+                <h3 class="table-title">বিস্তারিত রিপোর্ট</h3>
+                <div class="export-buttons">
+                    <button class="btn-export" onclick="exportToExcel()">
+                        <i class="fas fa-file-excel"></i> Excel
+                    </button>
+                    <button class="btn-export" onclick="exportToPDF()">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr id="tableHeaders">
+                            <!-- Dynamic headers will be loaded here -->
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Dynamic data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/reports-new.js"></script>
+</body>
+</html>

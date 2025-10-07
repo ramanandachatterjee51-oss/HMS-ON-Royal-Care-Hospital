@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registration Form - Raniganj Royal Care Hospital (RCH)</title>
+    
+    <!-- CSS Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #4caf50 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .header .logo {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff6b35;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .header h1 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: auto;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .form-header {
+            background: white;
+            border-radius: 15px 15px 0 0;
+            padding: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #1f2937;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-title i {
+            color: #ff6b35;
+        }
+
+        .form-subtitle {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        .form-body {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #f3f4f6;
+        }
+
+        .section-icon {
+            width: 28px;
+            height: 28px;
+            color: #ff6b35;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row.two-col {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .form-row.three-col {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .form-row.four-col {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: #ef4444;
+        }
+
+        .form-control, .form-select {
+            padding: 0.9rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus, .form-select:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-control::placeholder {
+            color: #9ca3af;
+        }
+
+        .readonly-field {
+            background: #f9fafb;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .file-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .file-upload:hover {
+            border-color: #ff6b35;
+            background: #fff5f0;
+            transform: scale(1.02);
+        }
+
+        .file-upload input {
+            display: none;
+        }
+
+        .file-upload-text {
+            color: #6b7280;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .file-upload-icon {
+            font-size: 2.5rem;
+            color: #ff6b35;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 3rem 0 2rem 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #4caf50 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .data-table-section {
+            margin-top: 4rem;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #ff6b35 0%, #4caf50 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+        }
+
+        .table-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 25px;
+            font-size: 0.9rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-export:hover {
+            transform: translateY(-2px);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #ff6b35 0%, #4caf50 100%);
+            color: white;
+            padding: 1.2rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .data-table td {
+            padding: 1.2rem;
+            border-bottom: 1px solid #f3f4f6;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.01);
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin: 0 0.2rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #d1d5db;
+        }
+
+        .validation-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        }
+
+        .validation-success {
+            border-color: #4caf50 !important;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1) !important;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+
+            .form-header, .form-body {
+                padding: 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row.two-col,
+            .form-row.three-col,
+            .form-row.four-col {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-container {
+                flex-direction: column;
+            }
+
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">RCH</div>
+        <h1>Raniganj Royal Care Hospital - Patient Registration</h1>
+        <a href="dashboard.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+        </a>
+    </div>
+
+    <div class="container">
+        <!-- Form Header -->
+        <div class="form-header">
+            <div class="form-title">
+                <i class="fas fa-user-plus"></i>
+                Patient Registration Form
+            </div>
+            <div class="form-subtitle">Complete patient information for hospital registration</div>
+        </div>
+
+        <!-- Form Body -->
+        <div class="form-body">
+            <form id="patientRegistrationForm">
+                <!-- Personal Information Section -->
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-user section-icon"></i>
+                        <h3 class="section-title">Personal Information</h3>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label">Patient ID</label>
+                            <input type="text" class="form-control readonly-field" id="patientId" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Registration Date</label>
+                            <input type="text" class="form-control readonly-field" id="registrationDate" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-row three-col">
+                        <div class="form-group">
+                            <label class="form-label required">First Name</label>
+                            <input type="text" class="form-control" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Middle Name</label>
+                            <input type="text" class="form-control" id="middleName">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row four-col">
+                        <div class="form-group">
+                            <label class="form-label required">Date of Birth</label>
+                            <input type="date" class="form-control" id="dateOfBirth" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Age</label>
+                            <input type="number" class="form-control readonly-field" id="age" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Gender</label>
+                            <select class="form-select" id="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Blood Group</label>
+                            <select class="form-select" id="bloodGroup">
+                                <option value="">Select</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row four-col">
+                        <div class="form-group">
+                            <label class="form-label">Marital Status</label>
+                            <select class="form-select" id="maritalStatus">
+                                <option value="">Select</option>
+                                <option value="single">Single</option>
+                                <option value="married">Married</option>
+                                <option value="divorced">Divorced</option>
+                                <option value="widowed">Widowed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Patient Photo</label>
+                            <div class="file-upload" onclick="document.getElementById('patientPhoto').click()">
+                                <input type="file" id="patientPhoto" accept="image/*">
+                                <i class="fas fa-camera file-upload-icon"></i>
+                                <div class="file-upload-text">Choose File - No file chosen</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nationality</label>
+                            <select class="form-select" id="nationality">
+                                <option value="bangladeshi" selected>Bangladeshi</option>
+                                <option value="indian">Indian</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group"></div>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-phone section-icon"></i>
+                        <h3 class="section-title">Contact Information</h3>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label required">Phone Number</label>
+                            <input type="tel" class="form-control" id="phoneNumber" placeholder="+919876543210" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="emailAddress">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Present Address</label>
+                            <textarea class="form-control" id="presentAddress" rows="3" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row three-col">
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" id="city">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">District</label>
+                            <select class="form-select" id="district">
+                                <option value="">Select District</option>
+                                <option value="Alipurduar">Alipurduar</option>
+                                <option value="Bankura">Bankura</option>
+                                <option value="Birbhum">Birbhum</option>
+                                <option value="Cooch Behar">Cooch Behar</option>
+                                <option value="Dakshin Dinajpur">Dakshin Dinajpur</option>
+                                <option value="Darjeeling">Darjeeling</option>
+                                <option value="Hooghly">Hooghly</option>
+                                <option value="Howrah">Howrah</option>
+                                <option value="Jalpaiguri">Jalpaiguri</option>
+                                <option value="Jhargram">Jhargram</option>
+                                <option value="Kalimpong">Kalimpong</option>
+                                <option value="Kolkata">Kolkata</option>
+                                <option value="Malda">Malda</option>
+                                <option value="Murshidabad">Murshidabad</option>
+                                <option value="Nadia">Nadia</option>
+                                <option value="North 24 Parganas">North 24 Parganas</option>
+                                <option value="Paschim Bardhaman" selected>Paschim Bardhaman</option>
+                                <option value="Paschim Medinipur">Paschim Medinipur</option>
+                                <option value="Purba Bardhaman">Purba Bardhaman</option>
+                                <option value="Purba Medinipur">Purba Medinipur</option>
+                                <option value="Purulia">Purulia</option>
+                                <option value="South 24 Parganas">South 24 Parganas</option>
+                                <option value="Uttar Dinajpur">Uttar Dinajpur</option>
+                                <!-- Other Indian Districts -->
+                                <option value="Araria">Araria</option>
+                                <option value="Arwal">Arwal</option>
+                                <option value="Aurangabad">Aurangabad</option>
+                                <option value="Banka">Banka</option>
+                                <option value="Begusarai">Begusarai</option>
+                                <option value="Bhagalpur">Bhagalpur</option>
+                                <option value="Bhojpur">Bhojpur</option>
+                                <option value="Buxar">Buxar</option>
+                                <option value="Darbhanga">Darbhanga</option>
+                                <option value="East Champaran">East Champaran</option>
+                                <option value="Gaya">Gaya</option>
+                                <option value="Gopalganj">Gopalganj</option>
+                                <option value="Jamui">Jamui</option>
+                                <option value="Jehanabad">Jehanabad</option>
+                                <option value="Kaimur">Kaimur</option>
+                                <option value="Katihar">Katihar</option>
+                                <option value="Khagaria">Khagaria</option>
+                                <option value="Kishanganj">Kishanganj</option>
+                                <option value="Lakhisarai">Lakhisarai</option>
+                                <option value="Madhepura">Madhepura</option>
+                                <option value="Madhubani">Madhubani</option>
+                                <option value="Munger">Munger</option>
+                                <option value="Muzaffarpur">Muzaffarpur</option>
+                                <option value="Nalanda">Nalanda</option>
+                                <option value="Nawada">Nawada</option>
+                                <option value="Patna">Patna</option>
+                                <option value="Purnia">Purnia</option>
+                                <option value="Rohtas">Rohtas</option>
+                                <option value="Saharsa">Saharsa</option>
+                                <option value="Samastipur">Samastipur</option>
+                                <option value="Saran">Saran</option>
+                                <option value="Sheikhpura">Sheikhpura</option>
+                                <option value="Sheohar">Sheohar</option>
+                                <option value="Sitamarhi">Sitamarhi</option>
+                                <option value="Siwan">Siwan</option>
+                                <option value="Supaul">Supaul</option>
+                                <option value="Vaishali">Vaishali</option>
+                                <option value="West Champaran">West Champaran</option>
+                                <option value="Bokaro">Bokaro</option>
+                                <option value="Chatra">Chatra</option>
+                                <option value="Deoghar">Deoghar</option>
+                                <option value="Dhanbad">Dhanbad</option>
+                                <option value="Dumka">Dumka</option>
+                                <option value="East Singhbhum">East Singhbhum</option>
+                                <option value="Garhwa">Garhwa</option>
+                                <option value="Giridih">Giridih</option>
+                                <option value="Godda">Godda</option>
+                                <option value="Gumla">Gumla</option>
+                                <option value="Hazaribagh">Hazaribagh</option>
+                                <option value="Jamtara">Jamtara</option>
+                                <option value="Khunti">Khunti</option>
+                                <option value="Koderma">Koderma</option>
+                                <option value="Latehar">Latehar</option>
+                                <option value="Lohardaga">Lohardaga</option>
+                                <option value="Pakur">Pakur</option>
+                                <option value="Palamu">Palamu</option>
+                                <option value="Ramgarh">Ramgarh</option>
+                                <option value="Ranchi">Ranchi</option>
+                                <option value="Sahebganj">Sahebganj</option>
+                                <option value="Seraikela Kharsawan">Seraikela Kharsawan</option>
+                                <option value="Simdega">Simdega</option>
+                                <option value="West Singhbhum">West Singhbhum</option>
+                                <!-- Odisha Districts -->
+                                <option value="Angul">Angul</option>
+                                <option value="Balangir">Balangir</option>
+                                <option value="Balasore">Balasore</option>
+                                <option value="Bargarh">Bargarh</option>
+                                <option value="Bhadrak">Bhadrak</option>
+                                <option value="Boudh">Boudh</option>
+                                <option value="Cuttack">Cuttack</option>
+                                <option value="Deogarh">Deogarh</option>
+                                <option value="Dhenkanal">Dhenkanal</option>
+                                <option value="Gajapati">Gajapati</option>
+                                <option value="Ganjam">Ganjam</option>
+                                <option value="Jagatsinghpur">Jagatsinghpur</option>
+                                <option value="Jajpur">Jajpur</option>
+                                <option value="Jharsuguda">Jharsuguda</option>
+                                <option value="Kalahandi">Kalahandi</option>
+                                <option value="Kandhamal">Kandhamal</option>
+                                <option value="Kendrapara">Kendrapara</option>
+                                <option value="Kendujhar">Kendujhar</option>
+                                <option value="Khordha">Khordha</option>
+                                <option value="Koraput">Koraput</option>
+                                <option value="Malkangiri">Malkangiri</option>
+                                <option value="Mayurbhanj">Mayurbhanj</option>
+                                <option value="Nabarangpur">Nabarangpur</option>
+                                <option value="Nayagarh">Nayagarh</option>
+                                <option value="Nuapada">Nuapada</option>
+                                <option value="Puri">Puri</option>
+                                <option value="Rayagada">Rayagada</option>
+                                <option value="Sambalpur">Sambalpur</option>
+                                <option value="Subarnapur">Subarnapur</option>
+                                <option value="Sundargarh">Sundargarh</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Postal Code</label>
+                            <input type="text" class="form-control" id="postalCode">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emergency Contact Section -->
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-exclamation-triangle section-icon"></i>
+                        <h3 class="section-title">Emergency Contact</h3>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label required">Contact Person Name</label>
+                            <input type="text" class="form-control" id="emergencyContactName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Relationship</label>
+                            <input type="text" class="form-control" id="relationship" placeholder="e.g., Father, Mother, Spouse" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label required">Emergency Phone</label>
+                            <input type="tel" class="form-control" id="emergencyPhone" placeholder="+919876543210" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Emergency Contact Address</label>
+                            <input type="text" class="form-control" id="emergencyContactAddress">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical Information Section -->
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-heartbeat section-icon"></i>
+                        <h3 class="section-title">Medical Information</h3>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label">Referring Doctor</label>
+                            <select class="form-select" id="referringDoctor">
+                                <option value="">Select Doctor</option>
+                                <option value="dr-ahmed">Dr. Ahmed Rahman</option>
+                                <option value="dr-fatima">Dr. Fatima Khan</option>
+                                <option value="dr-hassan">Dr. Hassan Ali</option>
+                                <option value="dr-nasir">Dr. Nasir Uddin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <select class="form-select" id="department">
+                                <option value="">Select Department</option>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="neurology">Neurology</option>
+                                <option value="orthopedics">Orthopedics</option>
+                                <option value="pediatrics">Pediatrics</option>
+                                <option value="general">General Medicine</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label">Medical History</label>
+                            <textarea class="form-control" id="medicalHistory" rows="3" placeholder="Previous illnesses, surgeries, chronic conditions"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Current Medications</label>
+                            <textarea class="form-control" id="currentMedications" rows="3" placeholder="List current medications and dosages"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label">Allergies</label>
+                            <input type="text" class="form-control" id="allergies" placeholder="Drug allergies, food allergies, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Insurance Information</label>
+                            <input type="text" class="form-control" id="insuranceInfo" placeholder="Insurance provider and policy number">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Upload Section -->
+                <div class="section">
+                    <div class="section-header">
+                        <i class="fas fa-file-upload section-icon"></i>
+                        <h3 class="section-title">Document Upload</h3>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label">Aadhar Card</label>
+                            <div class="file-upload" onclick="document.getElementById('aadharCard').click()">
+                                <input type="file" id="aadharCard" accept=".pdf,.jpg,.jpeg,.png">
+                                <i class="fas fa-id-card file-upload-icon"></i>
+                                <div class="file-upload-text">Choose File - No file chosen</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Medical Certificate</label>
+                            <div class="file-upload" onclick="document.getElementById('medicalCertificate').click()">
+                                <input type="file" id="medicalCertificate" accept=".pdf,.jpg,.jpeg,.png">
+                                <i class="fas fa-file-medical file-upload-icon"></i>
+                                <div class="file-upload-text">Choose File - No file chosen</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="btn-container">
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i>
+                        Register Patient
+                    </button>
+                    <button type="button" class="btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-redo"></i>
+                        Reset Form
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Data Table Section -->
+        <div class="data-table-section">
+            <div class="table-header">
+                <h2><i class="fas fa-table"></i> Registered Patients Database</h2>
+            </div>
+            <div class="table-container">
+                <div class="table-controls">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search patients by name, ID, phone, or email...">
+                    <button class="btn-export" onclick="exportData()">
+                        <i class="fas fa-download"></i>
+                        Export CSV
+                    </button>
+                </div>
+                
+                <table class="data-table" id="patientsTable">
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Full Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Registration Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientsTableBody">
+                        <!-- Data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/patient-registration-advanced-fixed.js"></script>
+</body>
+</html>

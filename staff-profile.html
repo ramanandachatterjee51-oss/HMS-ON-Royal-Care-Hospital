@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>স্টাফ প্রোফাইল - হাসপাতাল ব্যবস্থাপনা সিস্টেম</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        .main-container {
+            margin-top: 100px;
+            padding: 20px;
+        }
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        .card-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px;
+            border: none;
+        }
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .stats-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        .info-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .activity-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+        }
+        .badge-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .status-active { background-color: #27ae60; color: white; }
+        .status-inactive { background-color: #95a5a6; color: white; }
+        .status-leave { background-color: #f39c12; color: white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-hospital-alt text-primary"></i>
+                হাসপাতাল ব্যবস্থাপনা
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="fas fa-tachometer-alt"></i> ড্যাশবোর্ড</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="staff-profile.html"><i class="fas fa-user-tie"></i> স্টাফ প্রোফাইল</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-container">
+        <!-- Profile Header -->
+        <div class="profile-card mb-4">
+            <div class="card-header text-center">
+                <div class="row align-items-center">
+                    <div class="col-md-3">
+                        <img src="https://via.placeholder.com/150" alt="Profile Photo" class="profile-photo" id="profilePhoto">
+                    </div>
+                    <div class="col-md-6">
+                        <h3 id="staffName">নার্স রহিমা খাতুন</h3>
+                        <p class="mb-1" id="staffPosition">সিনিয়র নার্স</p>
+                        <p class="mb-1" id="staffDepartment">নার্সিং বিভাগ</p>
+                        <span class="badge-status status-active" id="staffStatus">সক্রিয়</span>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-light mb-2" onclick="editProfile()">
+                            <i class="fas fa-edit"></i> প্রোফাইল সম্পাদনা
+                        </button>
+                        <button class="btn btn-light" onclick="changePhoto()">
+                            <i class="fas fa-camera"></i> ছবি পরিবর্তন
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <i class="fas fa-calendar-check fa-2x text-success mb-2"></i>
+                    <div class="fw-bold fs-4" id="totalWorkDays">245</div>
+                    <div class="text-muted">মোট কর্মদিবস</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <i class="fas fa-tasks fa-2x text-primary mb-2"></i>
+                    <div class="fw-bold fs-4" id="completedTasks">89</div>
+                    <div class="text-muted">সম্পন্ন কাজ</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                    <div class="fw-bold fs-4" id="pendingTasks">5</div>
+                    <div class="text-muted">অপেক্ষমাণ কাজ</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stats-card">
+                    <i class="fas fa-star fa-2x text-info mb-2"></i>
+                    <div class="fw-bold fs-4" id="performanceRating">4.8</div>
+                    <div class="text-muted">কর্মক্ষমতা রেটিং</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Personal Information -->
+            <div class="col-lg-8">
+                <div class="info-section">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-user"></i> ব্যক্তিগত তথ্য
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>পূর্ণ নাম:</strong> <span id="fullName">রহিমা খাতুন</span></p>
+                            <p><strong>কর্মচারী আইডি:</strong> <span id="employeeId">ST001</span></p>
+                            <p><strong>জন্ম তারিখ:</strong> <span id="birthDate">১৫ জানুয়ারি, ১৯৮৫</span></p>
+                            <p><strong>লিঙ্গ:</strong> <span id="gender">মহিলা</span></p>
+                            <p><strong>জাতীয়তা:</strong> <span id="nationality">বাংলাদেশী</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>ফোন:</strong> <span id="phone">০১৭১২৩৪৫৬৭৮</span></p>
+                            <p><strong>ইমেইল:</strong> <span id="email">rahima@hospital.com</span></p>
+                            <p><strong>জরুরি যোগাযোগ:</strong> <span id="emergencyContact">০১৮১২৩৪৫৬৭৮</span></p>
+                            <p><strong>রক্তের গ্রুপ:</strong> <span id="bloodGroup">B+</span></p>
+                            <p><strong>ধর্ম:</strong> <span id="religion">ইসলাম</span></p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p><strong>ঠিকানা:</strong> <span id="address">১২৩ মেইন রোড, ঢাকা-১২০০</span></p>
+                    </div>
+                </div>
+
+                <!-- Professional Information -->
+                <div class="info-section">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-briefcase"></i> পেশাগত তথ্য
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>পদবী:</strong> <span id="jobTitle">সিনিয়র নার্স</span></p>
+                            <p><strong>বিভাগ:</strong> <span id="department">নার্সিং</span></p>
+                            <p><strong>যোগদানের তারিখ:</strong> <span id="joinDate">১ জানুয়ারি, ২০২০</span></p>
+                            <p><strong>কর্মের ধরন:</strong> <span id="employmentType">পূর্ণকালীন</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>বেতন:</strong> <span id="salary">৳৩৫,০০০</span></p>
+                            <p><strong>শিফট:</strong> <span id="shift">দিন (৮:০০ - ১৬:০০)</span></p>
+                            <p><strong>সুপারভাইজার:</strong> <span id="supervisor">হেড নার্স ফাতেমা</span></p>
+                            <p><strong>লাইসেন্স নম্বর:</strong> <span id="licenseNumber">NL-2019-001234</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education & Qualifications -->
+                <div class="info-section">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-graduation-cap"></i> শিক্ষাগত যোগ্যতা
+                    </h5>
+                    <div id="educationList">
+                        <div class="mb-3">
+                            <strong>ডিপ্লোমা ইন নার্সিং সায়েন্স</strong><br>
+                            <span class="text-muted">ঢাকা নার্সিং কলেজ - ২০১৮</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>এইচএসসি (বিজ্ঞান)</strong><br>
+                            <span class="text-muted">ঢাকা কলেজ - ২০১৫</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>এসএসসি (বিজ্ঞান)</strong><br>
+                            <span class="text-muted">ঢাকা উচ্চ বিদ্যালয় - ২০১৩</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills & Certifications -->
+                <div class="info-section">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-certificate"></i> দক্ষতা ও সার্টিফিকেশন
+                    </h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>দক্ষতা:</h6>
+                            <ul>
+                                <li>রোগী পরিচর্যা</li>
+                                <li>ওষুধ প্রয়োগ</li>
+                                <li>জরুরি চিকিৎসা</li>
+                                <li>রক্তচাপ পরিমাপ</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>সার্টিফিকেশন:</h6>
+                            <ul>
+                                <li>BLS (Basic Life Support)</li>
+                                <li>CPR সার্টিফিকেট</li>
+                                <li>ইনফেকশন কন্ট্রোল</li>
+                                <li>প্যাশেন্ট সেফটি</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities & Tasks -->
+            <div class="col-lg-4">
+                <div class="info-section">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-clock"></i> সাম্প্রতিক কার্যক্রম
+                    </h5>
+                    <div id="recentActivities">
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between">
+                                <strong>ওষুধ বিতরণ সম্পন্ন</strong>
+                                <small class="text-muted">২ ঘন্টা আগে</small>
+                            </div>
+                            <p class="mb-0 text-muted small">রুম ১০১-১০৫ এর রোগীদের সকালের ওষুধ বিতরণ</p>
+                        </div>
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between">
+                                <strong>রোগী চেকআপ</strong>
+                                <small class="text-muted">৪ ঘন্টা আগে</small>
+                            </div>
+                            <p class="mb-0 text-muted small">আইসিইউ রোগীদের ভাইটাল সাইন চেক</p>
+                        </div>
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between">
+                                <strong>শিফট রিপোর্ট জমা</strong>
+                                <small class="text-muted">গতকাল</small>
+                            </div>
+                            <p class="mb-0 text-muted small">রাতের শিফটের বিস্তারিত রিপোর্ট</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Tasks -->
+                <div class="info-section">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-tasks"></i> বর্তমান কাজ
+                    </h5>
+                    <div id="currentTasks">
+                        <div class="activity-item">
+                            <strong>রোগীর ওষুধ বিতরণ</strong>
+                            <p class="mb-1 text-muted small">সকাল ১০টায় রুম ১০১-১০৫</p>
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar bg-success" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <strong>মাসিক রিপোর্ট প্রস্তুত</strong>
+                            <p class="mb-1 text-muted small">নার্সিং বিভাগের কার্যক্রম রিপোর্ট</p>
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar bg-warning" style="width: 40%"></div>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <strong>নতুন নার্স প্রশিক্ষণ</strong>
+                            <p class="mb-1 text-muted small">জুনিয়র নার্সদের অরিয়েন্টেশন</p>
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar bg-info" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leave Balance -->
+                <div class="info-section">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-calendar-alt"></i> ছুটির হিসাব
+                    </h5>
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="fw-bold fs-5 text-success">১৫</div>
+                            <small class="text-muted">বার্ষিক ছুটি</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="fw-bold fs-5 text-info">৮</div>
+                            <small class="text-muted">অসুস্থতা ছুটি</small>
+                        </div>
+                    </div>
+                    <div class="row text-center mt-2">
+                        <div class="col-6">
+                            <div class="fw-bold fs-5 text-warning">৩</div>
+                            <small class="text-muted">ব্যবহৃত ছুটি</small>
+                        </div>
+                        <div class="col-6">
+                            <div class="fw-bold fs-5 text-primary">২০</div>
+                            <small class="text-muted">অবশিষ্ট ছুটি</small>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-primary btn-sm w-100 mt-3" onclick="applyLeave()">
+                        <i class="fas fa-calendar-plus"></i> ছুটির আবেদন
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+    <script src="js/staff-profile.js"></script>
+</body>
+</html>
